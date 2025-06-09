@@ -36,7 +36,7 @@ public class ProductosService implements IDAO<ProductosEntity, Long> {
         if (productosRepository.existsById(entity.getId())) {
             return productosRepository.save(entity);
         }
-        return null; // or throw an exception
+        return null;
     }
     
     @Override
