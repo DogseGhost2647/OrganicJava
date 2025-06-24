@@ -8,13 +8,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "categorias")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
 public class CategoriasEntity {
 
     @Id
@@ -30,4 +35,9 @@ public class CategoriasEntity {
 
     @OneToMany(mappedBy = "categoria")
     private List<ProductosEntity> productos;
+
+    public CategoriasEntity(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 }

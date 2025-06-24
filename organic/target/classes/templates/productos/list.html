@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Productos</h1>
+    <a th:href="@{/productos/crear}">Crear nuevo producto</a>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Precio</th>
+                <th>Cantidad</th>
+                <th>Disponible</th>
+                <th>Categoría</th>
+                <th>Condición Cabello</th>
+                <th>Tipo Cabello</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="p : ${productos}">
+                <td th:text="${p.nombre}">Nombre</td>
+                <td th:text="${p.descripcion}">Descripción</td>
+                <td th:text="${p.precio}">Precio</td>
+                <td th:text="${p.cantidadDisponible}">Cantidad</td>
+                <td th:text="${p.disponible ? 'Sí' : 'No'}">Disponible</td>
+                <td th:text="${p.categoria.nombre}">Categoría</td>
+                <td th:text="${p.condiciones_cabellos.nombre}">Condición</td>
+                <td th:text="${p.tiposCabellos.nombre}">Tipo</td>
+                <td>
+                    <a th:href="@{'/productos/editar/' + ${p.id}}">Editar</a> |
+                    <a th:href="@{'/productos/eliminar/' + ${p.id}}">Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

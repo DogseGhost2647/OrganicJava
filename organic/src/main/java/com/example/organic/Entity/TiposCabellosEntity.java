@@ -8,9 +8,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tipos_cabellos")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class TiposCabellosEntity {
 
     @Id
@@ -24,6 +32,11 @@ public class TiposCabellosEntity {
     @Column(name = "descripcion")
     private String descripcion;
 
-    @OneToMany(mappedBy = "tipos_cabellos")
+    @OneToMany(mappedBy = "tiposCabellos")
     private List<ProductosEntity> productos;
+
+    public TiposCabellosEntity(String nombre, String descripcion) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+    }
 }

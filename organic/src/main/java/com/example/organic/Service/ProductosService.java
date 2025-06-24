@@ -3,15 +3,14 @@ package com.example.organic.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.example.organic.Entity.ProductosEntity;
 import com.example.organic.Repository.ProductosRepository;
 import com.example.organic.Service.DAO.IDAO;
 
+@Service
 public class ProductosService implements IDAO<ProductosEntity, Long> {
-
-    @Autowired
-    private IDAO idao;
 
     @Autowired
     private ProductosRepository productosRepository;

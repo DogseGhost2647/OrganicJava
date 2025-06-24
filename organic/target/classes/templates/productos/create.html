@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Crear Producto</title>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h1>Crear Nuevo Producto</h1>
+
+    <form th:action="@{/productos/guardar}" method="post" th:object="${producto}">
+        <div>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" th:field="*{nombre}" required />
+        </div>
+
+        <div>
+            <label for="descripcion">Descripción:</label>
+            <input type="text" id="descripcion" th:field="*{descripcion}" required />
+        </div>
+
+        <div>
+            <label for="precio">Precio:</label>
+            <input type="number" id="precio" th:field="*{precio}" step="0.01" required />
+        </div>
+
+        <div>
+            <label for="cantidadDisponible">Cantidad Disponible:</label>
+            <input type="number" id="cantidadDisponible" th:field="*{cantidadDisponible}" required />
+        </div>
+
+        <div>
+            <label for="disponible">¿Disponible?</label>
+            <input type="checkbox" id="disponible" th:field="*{disponible}" />
+        </div>
+
+        <div>
+            <label for="categoria">Categoría:</label>
+            <select id="categoria" th:field="*{categoria.id}" required>
+                <option value="" disabled selected>Seleccione una categoría</option>
+                <option th:each="cat : ${categoria}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="condiciones_cabellos">Condición del Cabello:</label>
+            <select id="condiciones_cabellos" th:field="*{condiciones_cabellos.id}" required>
+                <option value="" disabled selected>Seleccione una condición</option>
+                <option th:each="c : ${condicionesCabellos}" th:value="${c.id}" th:text="${c.nombre}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="tiposCabellos">Tipo de Cabello:</label>
+            <select id="tiposCabellos" th:field="*{tiposCabellos.id}" required>
+                <option value="" disabled selected>Seleccione un tipo</option>
+                <option th:each="t : ${tiposCabellos}" th:value="${t.id}" th:text="${t.nombre}"></option>
+            </select>
+        </div>
+
+        <div>
+            <button type="submit">Guardar Producto</button>
+            <a th:href="@{/productos}">Cancelar</a>
+        </div>
+    </form>
+</body>
+</html>
