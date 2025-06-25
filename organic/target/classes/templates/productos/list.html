@@ -2,40 +2,67 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Lista de Productos</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 <body>
-    <h1>Productos</h1>
-    <a th:href="@{/productos/crear}">Crear nuevo producto</a>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción</th>
-                <th>Precio</th>
-                <th>Cantidad</th>
-                <th>Disponible</th>
-                <th>Categoría</th>
-                <th>Condición Cabello</th>
-                <th>Tipo Cabello</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="p : ${productos}">
-                <td th:text="${p.nombre}">Nombre</td>
-                <td th:text="${p.descripcion}">Descripción</td>
-                <td th:text="${p.precio}">Precio</td>
-                <td th:text="${p.cantidadDisponible}">Cantidad</td>
-                <td th:text="${p.disponible ? 'Sí' : 'No'}">Disponible</td>
-                <td th:text="${p.categoria.nombre}">Categoría</td>
-                <td th:text="${p.condiciones_cabellos.nombre}">Condición</td>
-                <td th:text="${p.tiposCabellos.nombre}">Tipo</td>
-                <td>
-                    <a th:href="@{'/productos/editar/' + ${p.id}}">Editar</a> |
-                    <a th:href="@{'/productos/eliminar/' + ${p.id}}">Eliminar</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+
+    <!-- NAVBAR -->
+    <nav class="shadow mb-4" style="background-color: #6c9724;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a th:href="@{/}" class="text-xl font-semibold text-white">Organic</a>
+                <div class="space-x-4">
+                    <a th:href="@{/productos}" class="text-white hover:underline"></a>
+                    <a th:href="@{/categorias}" class="text-white hover:underline"></a>
+                    <a th:href="@{/logout}" class="text-red-100 hover:text-white">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- CONTENIDO -->
+    <h1 class="text-center text-2xl font-bold mb-6">Productos</h1>
+
+    <div class="table-container max-w-7xl mx-auto px-4">
+        <div style="margin-bottom: 1rem;" class="text-center">
+            <a th:href="@{/productos/crear}" class="btn btn-primary no-underline inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Crear nuevo producto
+            </a>
+        </div>
+
+        <table class="table w-full table-auto border border-gray-300 text-sm text-left bg-white">
+            <thead class="bg-gray-100 text-gray-700">
+                <tr>
+                    <th class="p-2 border">Nombre</th>
+                    <th class="p-2 border">Descripción</th>
+                    <th class="p-2 border">Precio</th>
+                    <th class="p-2 border">Cantidad</th>
+                    <th class="p-2 border">Disponible</th>
+                    <th class="p-2 border">Categoría</th>
+                    <th class="p-2 border">Condición Cabello</th>
+                    <th class="p-2 border">Tipo Cabello</th>
+                    <th class="p-2 border">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="p : ${productos}" class="hover:bg-gray-50">
+                    <td class="p-2 border" th:text="${p.nombre}">Nombre</td>
+                    <td class="p-2 border" th:text="${p.descripcion}">Descripción</td>
+                    <td class="p-2 border" th:text="${p.precio}">Precio</td>
+                    <td class="p-2 border" th:text="${p.cantidadDisponible}">Cantidad</td>
+                    <td class="p-2 border" th:text="${p.disponible ? 'Sí' : 'No'}">Disponible</td>
+                    <td class="p-2 border" th:text="${p.categoria?.nombre}">Categoría</td>
+                    <td class="p-2 border" th:text="${p.condicionesCabellos?.nombre}">Condición</td>
+                    <td class="p-2 border" th:text="${p.tiposCabellos?.nombre}">Tipo</td>
+                    <td class="p-2 border">
+                        <a th:href="@{'/productos/editar/' + ${p.id}}" class="bg-yellow-500 text-white px-2 py-1 rounded hover:bg-yellow-600">Editar</a>
+                        <a th:href="@{'/productos/eliminar/' + ${p.id}}" class="bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700 ml-2" 
+                           onclick="return confirm('¿Seguro que deseas eliminar este producto?')">Eliminar</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>

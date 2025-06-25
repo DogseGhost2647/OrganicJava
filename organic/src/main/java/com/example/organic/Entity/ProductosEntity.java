@@ -42,13 +42,16 @@ public class ProductosEntity {
     @Column(name = "disponible")
     private Boolean disponible;
 
+    @Column(name= "imagen_url")
+    private String imagenUrl;
+
     @ManyToOne
     @JoinColumn(name = "categoria_id")
     private CategoriasEntity categoria;
 
     @ManyToOne
     @JoinColumn(name = "condiciones_cabellos_id")
-    private CondicionesCabellosEntity condiciones_cabellos;
+    private CondicionesCabellosEntity condicionesCabellos;
 
     @ManyToOne
     @JoinColumn(name = "tipos_cabellos_id")

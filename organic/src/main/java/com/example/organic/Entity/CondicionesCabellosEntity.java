@@ -34,7 +34,7 @@ public class CondicionesCabellosEntity {
     @Column(name = "descripcion")
     private String descripcion;
     
-    @OneToMany(mappedBy = "condiciones_cabellos")
+    @OneToMany(mappedBy = "condicionesCabellos")
     private List<ProductosEntity> productos;
 
     public CondicionesCabellosEntity(String nombre, String descripcion) {

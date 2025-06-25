@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Crear Producto</title>
     <meta charset="UTF-8">
+    <title>Editar Producto</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -23,67 +23,64 @@
 </nav>
 
 <!-- CONTENIDO -->
-<h1 class="text-center text-2xl font-bold mb-6">Crear Nuevo Producto</h1>
+<h1 class="text-center text-2xl font-bold mb-6">Editar Producto</h1>
 
 <div class="max-w-3xl mx-auto px-4">
-    <form th:action="@{/productos/guardar}" method="post" th:object="${producto}" enctype="multipart/form-data" class="space-y-4 bg-white p-6 shadow rounded">
+    <form th:action="@{'/productos/actualizar/' + ${producto.id}}" th:object="${producto}" method="post" class="space-y-4 bg-white p-6 shadow rounded">
+        <input type="hidden" th:field="*{id}" />
+
         <div>
             <label for="nombre" class="block font-medium">Nombre:</label>
-            <input type="text" id="nombre" th:field="*{nombre}" required class="w-full border rounded px-3 py-2" />
+            <input type="text" th:field="*{nombre}" id="nombre" required class="w-full border rounded px-3 py-2" />
         </div>
 
         <div>
             <label for="descripcion" class="block font-medium">Descripción:</label>
-            <input type="text" id="descripcion" th:field="*{descripcion}" required class="w-full border rounded px-3 py-2" />
+            <textarea th:field="*{descripcion}" id="descripcion" required class="w-full border rounded px-3 py-2"></textarea>
         </div>
 
         <div>
             <label for="precio" class="block font-medium">Precio:</label>
-            <input type="number" id="precio" th:field="*{precio}" step="0.01" required class="w-full border rounded px-3 py-2" />
+            <input type="number" th:field="*{precio}" id="precio" step="0.01" required class="w-full border rounded px-3 py-2" />
         </div>
 
         <div>
             <label for="cantidadDisponible" class="block font-medium">Cantidad Disponible:</label>
-            <input type="number" id="cantidadDisponible" th:field="*{cantidadDisponible}" required class="w-full border rounded px-3 py-2" />
+            <input type="number" th:field="*{cantidadDisponible}" id="cantidadDisponible" required class="w-full border rounded px-3 py-2" />
         </div>
 
         <div class="flex items-center gap-2">
-            <input type="checkbox" id="disponible" th:field="*{disponible}" />
+            <input type="checkbox" th:field="*{disponible}" id="disponible" />
             <label for="disponible" class="font-medium">¿Disponible?</label>
         </div>
 
         <div>
             <label for="categoria" class="block font-medium">Categoría:</label>
-            <select id="categoria" th:field="*{categoria.id}" required class="w-full border rounded px-3 py-2">
-                <option value="" disabled selected>Seleccione una categoría</option>
+            <select th:field="*{categoria.id}" id="categoria" required class="w-full border rounded px-3 py-2">
+                <option value="" disabled>Seleccione una categoría</option>
                 <option th:each="cat : ${categoria}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
             </select>
         </div>
 
         <div>
             <label for="condicionesCabellos" class="block font-medium">Condición del Cabello:</label>
-            <select id="condicionesCabellos" th:field="*{condicionesCabellos.id}" required class="w-full border rounded px-3 py-2">
-                <option value="" disabled selected>Seleccione una condición</option>
-                <option th:each="c : ${condicionesCabellos}" th:value="${c.id}" th:text="${c.nombre}"></option>
+            <select th:field="*{condicionesCabellos.id}" id="condicionesCabellos" required class="w-full border rounded px-3 py-2">
+                <option value="" disabled>Seleccione una condición</option>
+                <option th:each="cond : ${condicionesCabellos}" th:value="${cond.id}" th:text="${cond.nombre}"></option>
             </select>
         </div>
 
         <div>
             <label for="tiposCabellos" class="block font-medium">Tipo de Cabello:</label>
-            <select id="tiposCabellos" th:field="*{tiposCabellos.id}" required class="w-full border rounded px-3 py-2">
-                <option value="" disabled selected>Seleccione un tipo</option>
-                <option th:each="t : ${tiposCabellos}" th:value="${t.id}" th:text="${t.nombre}"></option>
+            <select th:field="*{tiposCabellos.id}" id="tiposCabellos" required class="w-full border rounded px-3 py-2">
+                <option value="" disabled>Seleccione un tipo</option>
+                <option th:each="tipo : ${tiposCabellos}" th:value="${tipo.id}" th:text="${tipo.nombre}"></option>
             </select>
         </div>
 
-        <div>
-            <label for="imagen" class="block font-medium">Imagen del Producto:</label>
-            <input type="file" name="imagen" id="imagen" accept="image/*" class="w-full border rounded px-3 py-2" />
-        </div>
-
         <div class="flex justify-between mt-4">
-            <button type="submit" class="btn btn-primary no-underline inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
-                Guardar Producto
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Actualizar
             </button>
             <a th:href="@{/productos}" class="text-gray-600 hover:underline">Cancelar</a>
         </div>

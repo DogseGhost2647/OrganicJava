@@ -1,17 +1,21 @@
 package com.example.organic.Controller;
 
-import java.util.List;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.organic.Entity.ProductosEntity;
 import com.example.organic.Service.CategoriasService;
@@ -53,11 +57,29 @@ public class ProductosController {
     }
 
     @PostMapping("/guardar")
-    public String guardarProducto(@ModelAttribute ProductosEntity producto){
+    public String guardarProducto(@ModelAttribute ProductosEntity producto, @RequestParam("imagen")MultipartFile imagen){
         producto.setCategoria(categoriasService.getById(producto.getCategoria().getId()));
-        producto.setCondiciones_cabellos(condicionesCabellosService.getById(producto.getCondiciones_cabellos().getId()));
+        producto.setCondicionesCabellos(condicionesCabellosService.getById(producto.getCondicionesCabellos().getId()));
         producto.setTiposCabellos(tiposCabellosService.getById(producto.getTiposCabellos().getId()));
     
+        if (!imagen.isEmpty()) {
+            String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
+            Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
+            Path rutaArchivo = uploadDir.resolve(nombreArchivo);
+
+            try {
+                Files.createDirectories(uploadDir);
+                imagen.transferTo(rutaArchivo.toFile());
+                producto.setImagenUrl("/uploads/" + nombreArchivo);
+                System.out.println("✅ Imagen guardada en: " + rutaArchivo.toAbsolutePath());
+            } catch (IOException e) {
+                System.err.println("❌ Error guardando la imagen:");
+                e.printStackTrace();
+            }
+        } else {
+            System.err.println("⚠️ Imagen vacía o no seleccionada");
+        }
+
         productosService.create(producto);
         return "redirect:/productos";
     }
@@ -70,7 +92,7 @@ public class ProductosController {
         model.addAttribute("categoria", categoriasService.getAll());
         model.addAttribute("condicionesCabellos", condicionesCabellosService.getAll());
         model.addAttribute("tiposCabellos", tiposCabellosService.getAll());
-        return "productos/edit";
+        return "productos/editar";
     }
 
     @PostMapping("/actualizar/{id}")

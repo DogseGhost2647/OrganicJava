@@ -1,6 +1,7 @@
 package com.example.organic.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,7 +28,23 @@ public class ProductosService implements IDAO<ProductosEntity, Long> {
 
     @Override
     public ProductosEntity create(ProductosEntity entity){
-        return productosRepository.save(entity);
+
+        Optional<ProductosEntity> existente = productosRepository.findByNombreAndCategoriaAndTiposCabellosAndCondicionesCabellos(
+        entity.getNombre(),
+        entity.getCategoria(),
+        entity.getTiposCabellos(),
+        entity.getCondicionesCabellos()
+        );
+
+        if(existente.isPresent()){
+            ProductosEntity productoExistente = existente.get();
+            productoExistente.setCantidadDisponible(
+                productoExistente.getCantidadDisponible() + entity.getCantidadDisponible()
+            );
+            return productosRepository.save(productoExistente);
+        } else {
+            return productosRepository.save(entity);
+        }
     }
 
     @Override

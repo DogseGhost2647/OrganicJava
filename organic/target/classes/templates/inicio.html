@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inicio - Organic</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+<!-- NAVBAR -->
+<nav class="shadow mb-4" style="background-color: #6c9724;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <a th:href="@{/}" class="text-xl font-semibold text-white">Organic</a>
+            <div class="space-x-4">
+                <a th:href="@{/productos}" class="text-white hover:underline">Productos</a>
+                <a th:href="@{/categorias}" class="text-white hover:underline"></a>
+                <a th:href="@{/logout}" class="text-red-100 hover:text-white">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO -->
+<div class="max-w-6xl mx-auto px-4">
+    <h1 class="text-3xl font-bold text-center mb-8">Bienvenido a Organic 🌿</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div th:each="producto : ${productos}" class="bg-white p-4 rounded shadow hover:shadow-md transition">
+            <img th:src="@{${producto.imagenUrl}}" alt="Imagen del producto" class="w-48 h-48 object-cover mx-auto mb-4">
+            <h2 class="text-xl font-semibold" th:text="${producto.nombre}">Nombre</h2>
+            <p class="text-gray-600" th:text="${producto.descripcion}">Descripción</p>
+            <p class="text-green-600 font-bold mt-2" th:text="'$' + ${producto.precio}">Precio</p>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
