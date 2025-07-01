@@ -73,11 +73,11 @@ public class ProductosController {
                 producto.setImagenUrl("/uploads/" + nombreArchivo);
                 System.out.println("✅ Imagen guardada en: " + rutaArchivo.toAbsolutePath());
             } catch (IOException e) {
-                System.err.println("❌ Error guardando la imagen:");
+                System.err.println("Error guardando la imagen:");
                 e.printStackTrace();
             }
         } else {
-            System.err.println("⚠️ Imagen vacía o no seleccionada");
+            System.err.println("Imagen vacía o no seleccionada");
         }
 
         productosService.create(producto);

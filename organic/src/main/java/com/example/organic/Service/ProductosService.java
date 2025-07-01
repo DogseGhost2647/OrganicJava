@@ -62,4 +62,8 @@ public class ProductosService implements IDAO<ProductosEntity, Long> {
         }
     }
 
+    public long contarProductos() {
+    return productosRepository.count();
+    }
+
 }

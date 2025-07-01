@@ -14,9 +14,23 @@ public class InicioController {
     @Autowired
     private ProductosService productosService;
 
-    @GetMapping("/")
+    @GetMapping("/inicio")
     public String mostrarInicio(Model model) {
         model.addAttribute("productos", productosService.getAll());
         return "inicio";
     }
+
+    @GetMapping("/home")
+    public String mostrarHome(Model model) {
+        model.addAttribute("productos", productosService.getAll());
+        return "home";
+    }
+
+    @GetMapping("/homeusuario")
+    public String mostrarHomeUsuario(Model model) {
+        model.addAttribute("productos", productosService.getAll());
+        return "homeusuario";
+    }
+
+    
 }
