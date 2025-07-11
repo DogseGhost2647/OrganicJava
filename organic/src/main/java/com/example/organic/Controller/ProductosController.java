@@ -107,4 +107,19 @@ public class ProductosController {
         productosService.delete(id);
         return "redirect:/productos";
     }
+
+    // --- NUEVO MÉTODO PARA GENERAR EL PDF ---
+    @GetMapping("/listado/pdf") // Esta será la URL para obtener el PDF: http://localhost:8080/productos/listado/pdf
+    public String generarPdfListadoProductos(Model model) {
+        // 1. Obtener la lista de productos de tu servicio
+        List<ProductosEntity> listadoDeProductos = productosService.getAll(); // Usas getAll() para obtener todos los productos
+
+        // 2. Añadir la lista al modelo con la clave "productos"
+        //    Esta clave ("productos") DEBE COINCIDIR con lo que espera tu clase ListarProductosPdf.java
+        model.addAttribute("productos", listadoDeProductos);
+
+        // 3. Devolver el nombre del componente de la vista PDF que definiste en @Component
+        return "listaProductosPdfView"; // <-- Debe coincidir con el nombre del componente de tu vista PDF
+    }
+}
 }
