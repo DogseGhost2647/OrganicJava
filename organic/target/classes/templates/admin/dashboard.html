@@ -40,34 +40,36 @@
         </div>
     </div>
 
-    <!-- Accesos rápidos -->
-    <div class="mb-12">
-        <h2 class="text-2xl font-semibold mb-4 text-green-700">Accesos Rápidos</h2>
-        <div class="flex flex-wrap gap-4">
-            <a th:href="@{/productos}"
-               class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-               Lista de productos
-            </a>
-            <a th:href="@{/productos/crear}"
-               class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-               Crear Nuevo Producto
-            </a>
-            <!--boton del pfd-->
-            <a class="nav-link" th:href="@{/productos/listado/pdf}"
-               title="Generar PDF" target="_blank">
-                <img class="img-responsive center-box"
-                     th:src="@{/images/pdficono.png}" height="30">
-            </a>
-            <a th:href="@{/pedidos}"
-               class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-               Ver Pedidos
-            </a>
-            <a th:href="@{/usuarios}"
-               class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-               Gestionar Usuarios
-            </a>
-        </div>
+<!-- Accesos rápidos -->
+<div class="mb-12">
+    <h2 class="text-2xl font-semibold mb-4 text-green-700">Accesos Rápidos</h2>
+    <div class="flex flex-wrap gap-4">
+        <a th:href="@{/productos}"
+           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+           Lista de productos
+        </a>
+        <a th:href="@{/productos/crear}"
+           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+           Crear Nuevo Producto
+        </a>
+        <!-- Botón de PDF con estilo uniforme -->
+        <a th:href="@{/productos/listado/pdf}" 
+           class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
+           title="Generar PDF" target="_blank">
+            <img th:src="@{/images/pdficono.png}" alt="PDF" class="h-6 w-auto">
+            <span>Exportar PDF</span>
+        </a>
+        <a th:href="@{/pedidos}"
+           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+           Ver Pedidos
+        </a>
+        <a th:href="@{/usuarios}"
+           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+           Gestionar Usuarios
+        </a>
     </div>
+</div>
+
 
     <!-- Productos en Grid -->
     <div id="productos" class="max-w-6xl mx-auto px-4 py-12">
