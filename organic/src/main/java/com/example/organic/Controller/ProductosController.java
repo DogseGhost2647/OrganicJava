@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,18 +19,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.example.organic.Entity.ProductosEntity;
 import com.example.organic.Service.CategoriasService;
 import com.example.organic.Service.CondicionesCabellosService;
 import com.example.organic.Service.ProductosService;
 import com.example.organic.Service.TiposCabellosService;
+import com.example.organic.util.ListarProductosPdf;
 
 
 
 @Controller
 @RequestMapping("/productos")
 public class ProductosController {
+
+    @Autowired
+    private ListarProductosPdf listarProductosPdf;
 
     @Autowired
     private ProductosService productosService;
@@ -109,18 +116,16 @@ public class ProductosController {
         return "redirect:/productos";
     }
 
-    // --- NUEVO MÉTODO PARA GENERAR EL PDF ---
-    @GetMapping("/listado/pdf") // Esta será la URL para obtener el PDF: http://localhost:8080/productos/listado/pdf
-    public String generarPdfListadoProductos(Model model) {
-        // 1. Obtener la lista de productos de tu servicio
-        List<ProductosEntity> listadoDeProductos = productosService.getAll(); // Usas getAll() para obtener todos los productos
+    @GetMapping("/list/pdf")
+    public ModelAndView generarPdf() {
+    List<ProductosEntity> productos = productosService.getAll();
 
-        // 2. Añadir la lista al modelo con la clave "productos"
-        //    Esta clave ("productos") DEBE COINCIDIR con lo que espera tu clase ListarProductosPdf.java
-        model.addAttribute("productos", listadoDeProductos);
+    Map<String, Object> model = new HashMap<>();
+    model.put("productos", productos);
 
-        // 3. Devolver el nombre del componente de la vista PDF que definiste en @Component
-        return "listaProductosPdfView"; // <-- Debe coincidir con el nombre del componente de tu vista PDF
+    return new ModelAndView(listarProductosPdf, model);
     }
+
+
 }
 
