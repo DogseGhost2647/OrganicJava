@@ -53,10 +53,10 @@
                Crear Nuevo Producto
             </a>
             <!--boton del pfd-->
-            <a class="nav-link" th:href="@{productos/list/(format=pdf}"}
-            tittle="Generar PDF" target="_blank">
+            <a class="nav-link" th:href="@{/productos/listado/pdf}"
+               title="Generar PDF" target="_blank">
                 <img class="img-responsive center-box"
-                     th:src ="@{/images/pdficono.png}" height="auto">
+                     th:src="@{/images/pdficono.png}" height="30">
             </a>
             <a th:href="@{/pedidos}"
                class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -122,4 +123,4 @@ public class ProductosController {
         return "listaProductosPdfView"; // <-- Debe coincidir con el nombre del componente de tu vista PDF
     }
 }
-}
+
