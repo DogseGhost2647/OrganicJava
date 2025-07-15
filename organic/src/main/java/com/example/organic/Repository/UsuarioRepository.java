@@ -6,4 +6,5 @@ import com.example.organic.Entity.UsuarioEntity;
 
 public interface UsuarioRepository extends JpaRepository <UsuarioEntity, Long> {
     UsuarioEntity findByCorreo(String correo);
+    boolean existsByCorreo(String correo);
 }

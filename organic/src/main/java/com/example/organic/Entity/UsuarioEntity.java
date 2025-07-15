@@ -43,5 +43,10 @@ public class UsuarioEntity {
     public boolean EsAdmin(){
         return esadmin;
     }
+    
+    public void setEsadmin(boolean esadmin) {
+    this.esadmin = esadmin;
+    }
+
 }
 

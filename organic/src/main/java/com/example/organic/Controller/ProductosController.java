@@ -7,9 +7,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-
+import java.util.stream.Collectors;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.document.AbstractPdfView;
 
 import com.example.organic.Entity.ProductosEntity;
 import com.example.organic.Service.CategoriasService;
@@ -116,15 +118,32 @@ public class ProductosController {
         return "redirect:/productos";
     }
 
+    @Autowired
+    @Qualifier("listaProductosPdfView")
+    private AbstractPdfView listaProductosPdfView;
+
     @GetMapping("/list/pdf")
-    public ModelAndView generarPdf() {
-    List<ProductosEntity> productos = productosService.getAll();
+    public ModelAndView generarPdf(@RequestParam(required = false, defaultValue = "todos") String categoria) {
+        List<ProductosEntity> productos = productosService.getAll();
 
-    Map<String, Object> model = new HashMap<>();
-    model.put("productos", productos);
+        List<ProductosEntity> productosFiltrados;
+        if ("todos".equalsIgnoreCase(categoria)) {
+            productosFiltrados = productos;
+        } else {
+            productosFiltrados = productos.stream()
+                .filter(p -> p.getCategoria() != null && 
+                            p.getCategoria().getNombre().equalsIgnoreCase(categoria))
+                .collect(Collectors.toList());
+        }
 
-    return new ModelAndView(listarProductosPdf, model);
+        Map<String, Object> model = new HashMap<>();
+        model.put("productos", productosFiltrados);
+        model.put("categoriaFiltro", categoria);
+
+        return new ModelAndView(listaProductosPdfView, model);
     }
+
+
 
 
 }

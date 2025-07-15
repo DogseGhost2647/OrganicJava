@@ -52,21 +52,36 @@
            class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
            Crear Nuevo Producto
         </a>
-        <!-- Botón de PDF con estilo uniforme -->
-        <a th:href="@{/productos/list/pdf}" 
-           class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
-           title="Generar PDF" target="_blank">
-            <img th:src="@{/images/pdficono.png}" alt="PDF" class="h-6 w-auto">
-            <span>Exportar PDF</span>
-        </a>
-        <a th:href="@{/pedidos}"
-           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-           Ver Pedidos
-        </a>
-        <a th:href="@{/usuarios}"
-           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-           Gestionar Usuarios
-        </a>
+        <div class="flex items-center gap-4">
+    <label for="categoriaPdf" class="font-semibold text-green-700">Selecciona categoría:</label>
+    <select id="categoriaPdf" class="border border-green-600 rounded px-2 py-1">
+        <option value="todos">Todas las categorías</option>
+        <option value="shampoo">Shampoo</option>
+        <option value="acondicionador">Acondicionador</option>
+        <option value="tratamiento">Tratamiento</option>
+    </select>
+
+    <a id="btnExportarPdf" href="/productos/list/pdf" target="_blank"
+        class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
+        title="Generar PDF">
+        <img src="/images/pdficono.png" alt="PDF" class="h-6 w-auto">
+        <span>Exportar PDF</span>
+    </a>
+    </div>
+
+    <script>
+    const selectCategoria = document.getElementById('categoriaPdf');
+    const btnPdf = document.getElementById('btnExportarPdf');
+
+    selectCategoria.addEventListener('change', () => {
+        const categoria = selectCategoria.value;
+        if (categoria === 'todos') {
+        btnPdf.href = '/productos/list/pdf';
+        } else {
+        btnPdf.href = /productos/list/pdf?categoria=${encodeURIComponent(categoria)};
+        }
+    });
+    </script>
     </div>
 </div>
 

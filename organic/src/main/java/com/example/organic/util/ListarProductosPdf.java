@@ -11,6 +11,7 @@ import com.lowagie.text.pdf.PdfWriter; // Ya estaba
 import com.example.organic.Entity.ProductosEntity; // <-- ¡MUY IMPORTANTE! Debe ser tu clase de entidad Producto
 import java.util.List; // Necesario para List
 import java.util.Map; // Ya estaba
+import java.util.stream.Collectors;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,44 +23,59 @@ import org.springframework.web.servlet.view.document.AbstractPdfView;
 public class ListarProductosPdf extends AbstractPdfView {
 
     @Override
-    protected void buildPdfDocument(Map<String, Object> model, Document document, // 'Document' ya no necesita 'com.lowagie.text.'
-                                    PdfWriter writer, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    protected void buildPdfDocument(Map<String, Object> model, Document document, PdfWriter writer,
+                                    HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-        // Asegúrate de que el cast sea a tu entidad correcta, ProductosEntity
         @SuppressWarnings("unchecked")
-        List<ProductosEntity> listadoProductos = (List<ProductosEntity>) model.get("productos"); // <-- 'List' y 'ProductosEntity' correctamente importados
+        List<ProductosEntity> listadoProductos = (List<ProductosEntity>) model.get("productos");
 
-        document.setPageSize(PageSize.LETTER); // <-- 'PageSize' correctamente importado
+        String categoriaFiltro = (String) model.get("categoriaFiltro");
 
-        // 'PdfPTable' correctamente escrito (sin 't' minúscula)
+        // Filtro opcional dentro del PDF (puedes quitarlo si ya está filtrado en controlador)
+        List<ProductosEntity> productosFiltrados;
+        if (categoriaFiltro == null || categoriaFiltro.equalsIgnoreCase("todos")) {
+            productosFiltrados = listadoProductos;
+        } else {
+            productosFiltrados = listadoProductos.stream()
+                .filter(p -> p.getCategoria() != null &&
+                            p.getCategoria().getNombre().equalsIgnoreCase(categoriaFiltro))
+                .collect(Collectors.toList());
+        }
+
+        document.setPageSize(PageSize.LETTER);
+
+        String tituloReporte = (categoriaFiltro == null || categoriaFiltro.equalsIgnoreCase("todos")) ?
+                "Lista de productos - Todas las categorías" :
+                "Lista de productos - Categoría: " + categoriaFiltro;
+
         PdfPTable tablaTitulo = new PdfPTable(1);
-        PdfPCell celda = null; // <-- Variable en minúscula para convención
-
-        // 'PdfPCell' y 'Phrase' correctamente importados/escritos
-        celda = new PdfPCell(new Phrase("Lista de productos"));
+        PdfPCell celda = new PdfPCell(new Phrase(tituloReporte));
         celda.setBorder(0);
-        // 'Element' correctamente importado y 'setHorizontalAlignment' es el método correcto
         celda.setHorizontalAlignment(Element.ALIGN_CENTER);
-
-        tablaTitulo.addCell(celda); // Usar 'celda' en minúscula
+        tablaTitulo.addCell(celda);
         tablaTitulo.setSpacingAfter(15);
 
-        // 'PdfPTable' correctamente escrito
         PdfPTable tablaProductos = new PdfPTable(9);
+        tablaProductos.setWidthPercentage(100);
 
-        // Bucle forEach correcto y acceso a propiedades con verificación de null
-        listadoProductos.forEach(producto -> { // <-- 'forEach' y variable 'producto'
-            // Acceso a métodos: .getId().toString() con paréntesis
+        // Aquí agregas encabezados a la tabla (opcional pero recomendable)
+        tablaProductos.addCell("ID");
+        tablaProductos.addCell("Nombre");
+        tablaProductos.addCell("Descripción");
+        tablaProductos.addCell("Precio");
+        tablaProductos.addCell("Cantidad Disponible");
+        tablaProductos.addCell("Disponible");
+        tablaProductos.addCell("Categoría ID");
+        tablaProductos.addCell("Condición Cabello ID");
+        tablaProductos.addCell("Tipo Cabello ID");
+
+        productosFiltrados.forEach(producto -> {
             tablaProductos.addCell(producto.getId() != null ? producto.getId().toString() : "");
             tablaProductos.addCell(producto.getNombre() != null ? producto.getNombre() : "");
             tablaProductos.addCell(producto.getDescripcion() != null ? producto.getDescripcion() : "");
-            // Asumiendo que Precio y CantidadDisponible son numéricos, se convierten a String
             tablaProductos.addCell(producto.getPrecio() != null ? producto.getPrecio().toString() : "");
             tablaProductos.addCell(producto.getCantidadDisponible() != null ? producto.getCantidadDisponible().toString() : "");
-            // Asumiendo que Disponible es un Boolean
             tablaProductos.addCell(producto.getDisponible() != null ? producto.getDisponible().toString() : "");
-            // Acceso a ID de entidades relacionadas. Requiere que Categoria, CondicionesCabellos, TiposCabellos
-            // sean objetos completos en ProductosEntity, no solo IDs primitivos.
             tablaProductos.addCell(producto.getCategoria() != null && producto.getCategoria().getId() != null ? producto.getCategoria().getId().toString() : "");
             tablaProductos.addCell(producto.getCondicionesCabellos() != null && producto.getCondicionesCabellos().getId() != null ? producto.getCondicionesCabellos().getId().toString() : "");
             tablaProductos.addCell(producto.getTiposCabellos() != null && producto.getTiposCabellos().getId() != null ? producto.getTiposCabellos().getId().toString() : "");
@@ -68,6 +84,7 @@ public class ListarProductosPdf extends AbstractPdfView {
         document.add(tablaTitulo);
         document.add(tablaProductos);
     }
+
 }
 
 /** package com.example.organic.util;
