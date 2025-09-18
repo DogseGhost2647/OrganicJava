@@ -69,8 +69,7 @@
     </a>
     </div>
 
-    <script>
-    const selectCategoria = document.getElementById('categoriaPdf');
+    <script> const selectCategoria = document.getElementById('categoriaPdf');
     const btnPdf = document.getElementById('btnExportarPdf');
 
     selectCategoria.addEventListener('change', () => {
@@ -80,8 +79,7 @@
         } else {
         btnPdf.href = /productos/list/pdf?categoria=${encodeURIComponent(categoria)};
         }
-    });
-    </script>
+    }); </script>
     </div>
 </div>
 
