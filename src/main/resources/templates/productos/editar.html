@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Producto</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="shadow mb-4" style="background-color: #6c9724;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <a th:href="@{/}" class="text-xl font-semibold text-white">Organic</a>
+            <div class="space-x-4">
+                <a th:href="@{/productos}" class="text-white hover:underline"></a>
+                <a th:href="@{/categorias}" class="text-white hover:underline"></a>
+                <a th:href="@{/logout}" class="text-red-100 hover:text-white">Cerrar sesión</a>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO -->
+<h1 class="text-center text-2xl font-bold mb-6">Editar Producto</h1>
+
+<div class="max-w-3xl mx-auto px-4">
+    <form th:action="@{'/productos/actualizar/' + ${producto.id}}" th:object="${producto}" method="post" class="space-y-4 bg-white p-6 shadow rounded">
+        <input type="hidden" th:field="*{id}" />
+
+        <div>
+            <label for="nombre" class="block font-medium">Nombre:</label>
+            <input type="text" th:field="*{nombre}" id="nombre" required class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <div>
+            <label for="descripcion" class="block font-medium">Descripción:</label>
+            <textarea th:field="*{descripcion}" id="descripcion" required class="w-full border rounded px-3 py-2"></textarea>
+        </div>
+
+        <div>
+            <label for="precio" class="block font-medium">Precio:</label>
+            <input type="number" th:field="*{precio}" id="precio" step="0.01" required class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <div>
+            <label for="cantidadDisponible" class="block font-medium">Cantidad Disponible:</label>
+            <input type="number" th:field="*{cantidadDisponible}" id="cantidadDisponible" required class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <div class="flex items-center gap-2">
+            <input type="checkbox" th:field="*{disponible}" id="disponible" />
+            <label for="disponible" class="font-medium">¿Disponible?</label>
+        </div>
+
+        <div>
+            <label for="categoria" class="block font-medium">Categoría:</label>
+            <select th:field="*{categoria.id}" id="categoria" required class="w-full border rounded px-3 py-2">
+                <option value="" disabled>Seleccione una categoría</option>
+                <option th:each="cat : ${categoria}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="condicionesCabellos" class="block font-medium">Condición del Cabello:</label>
+            <select th:field="*{condicionesCabellos.id}" id="condicionesCabellos" required class="w-full border rounded px-3 py-2">
+                <option value="" disabled>Seleccione una condición</option>
+                <option th:each="cond : ${condicionesCabellos}" th:value="${cond.id}" th:text="${cond.nombre}"></option>
+            </select>
+        </div>
+
+        <div>
+            <label for="tiposCabellos" class="block font-medium">Tipo de Cabello:</label>
+            <select th:field="*{tiposCabellos.id}" id="tiposCabellos" required class="w-full border rounded px-3 py-2">
+                <option value="" disabled>Seleccione un tipo</option>
+                <option th:each="tipo : ${tiposCabellos}" th:value="${tipo.id}" th:text="${tipo.nombre}"></option>
+            </select>
+        </div>
+
+        <div class="flex justify-between mt-4">
+            <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition">
+                Actualizar
+            </button>
+            <a th:href="@{/productos}" class="text-gray-600 hover:underline">Cancelar</a>
+        </div>
+    </form>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Inicio - Organic</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+<!-- NAVBAR -->
+<nav class="shadow mb-4" style="background-color: #6c9724;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+        <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
+        <div class="space-x-4">
+            <a href="#productos" class="text-white hover:underline">Productos</a>
+            <a th:href="@{/blog}" class="text-white hover:underline">Blog</a>
+            <a th:href="@{/contacto}" class="text-white hover:underline">Contacto</a>
+            <a th:href="@{/admin/dashboard}" class="text-white hover:underline">Dashboard</a>
+            <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="relative min-h-[1300px] md:min-h-[1500px] bg-center bg-cover flex items-center justify-center text-white"
+         th:style="|background-image: url('@{/images/banner.png}');|">
+
+    <!-- Overlay para mejorar la visibilidad del texto -->
+    <div class="absolute inset-0 bg-green-900 bg-opacity-50"></div>
+
+    <!-- Contenido del banner -->
+    <div class="relative z-10 text-center px-8 py-20 max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-6xl font-bold mb-6">Descubre el poder de lo natural para tu cabello </h1>
+        <p class="text-lg md:text-2xl mb-8">Productos 100% naturales, sin sulfatos ni parabenos. Dale a tu cabello lo que merece.</p>
+        <a href="#productos" class="bg-white text-green-700 px-8 py-4 rounded hover:bg-gray-200 transition inline-block">Ver productos</a>
+    </div>
+
+</section>
+
+<!-- PRODUCTOS DESTACADOS -->
+<div id="productos" class="max-w-6xl mx-auto px-4 py-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Nuestros Productos</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div th:each="producto : ${productos}" class="bg-white p-4 rounded shadow hover:shadow-md transition flex flex-col items-center">
+            <img th:src="@{${producto.imagenUrl}}" alt="Imagen del producto" class="w-48 h-48 object-cover mx-auto mb-4">
+            <h3 class="text-xl font-semibold mb-2" th:text="${producto.nombre}">Nombre</h3>
+            <p class="text-gray-600 mb-2 text-center" th:text="${producto.descripcion}">Descripción</p>
+            <p class="text-green-600 font-bold mb-4" th:text="'$' + ${producto.precio}">Precio</p>
+            <a th:href="@{'/carrito/agregar/' + ${producto.id}}"
+               class="inline-block px-5 py-2 rounded text-white font-semibold shadow-md
+                      bg-green-600 hover:bg-green-700 transition-colors duration-300 text-center">
+               Agregar al carrito
+            </a>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- BENEFICIOS -->
+<section class="bg-white py-12">
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6 text-center">
+        <div>
+            <span class="text-4xl">🌿</span>
+            <h4 class="font-semibold mt-2">Ingredientes Naturales</h4>
+            <p class="text-gray-600 mt-2">Cuidamos cada fórmula para ofrecer lo mejor de la naturaleza.</p>
+        </div>
+        <div>
+            <span class="text-4xl">🚚</span>
+            <h4 class="font-semibold mt-2">Envío Rápido</h4>
+            <p class="text-gray-600 mt-2">Entrega segura y rápida a todo el país.</p>
+        </div>
+        <div>
+            <span class="text-4xl">🧴</span>
+            <h4 class="font-semibold mt-2">Sin Sulfatos</h4>
+            <p class="text-gray-600 mt-2">Productos libres de químicos agresivos.</p>
+        </div>
+        <div>
+            <span class="text-4xl">💬</span>
+            <h4 class="font-semibold mt-2">Asesoría Personalizada</h4>
+            <p class="text-gray-600 mt-2">Te ayudamos a encontrar el producto ideal para tu tipo de cabello.</p>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="bg-green-100 py-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Lo que dicen nuestros clientes</h2>
+    <div class="max-w-4xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-700 mb-2">"Mi cabello nunca se había sentido tan suave y saludable. ¡Recomendado!"</p>
+            <span class="font-semibold">Laura G.</span>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-700 mb-2">"Los productos llegaron súper rápido y huelen increíble."</p>
+            <span class="font-semibold">Carlos M.</span>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <p class="text-gray-700 mb-2">"Por fin encontré algo natural que le funciona a mi cabello rizado."</p>
+            <span class="font-semibold">Ana P.</span>
+        </div>
+    </div>
+</section>
+
+<!-- BLOG O CONSEJOS -->
+<section id="blog" class="py-12">
+    <h2 class="text-3xl font-bold text-center mb-8">Consejos para tu cabello</h2>
+    <div class="max-w-6xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white p-4 rounded shadow">
+            <h4 class="font-semibold mb-2">Cómo cuidar tu cabello rizado de forma natural</h4>
+            <a href="#blog" class="text-green-700 hover:underline">Leer más</a>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h4 class="font-semibold mb-2">Beneficios de los aceites esenciales para el cabello</h4>
+            <a href="#blog" class="text-green-700 hover:underline">Leer más</a>
+        </div>
+        <div class="bg-white p-4 rounded shadow">
+            <h4 class="font-semibold mb-2">Errores comunes en el lavado del cabello</h4>
+            <a href="#blog" class="text-green-700 hover:underline">Leer más</a>
+        </div>
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="py-12 text-white text-center" style="background-color: #6c9724;">
+    <h2 class="text-3xl font-bold mb-4">Suscríbete para recibir ofertas y consejos</h2>
+    <form class="max-w-md mx-auto flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+        <input type="email" placeholder="Tu correo electrónico" class="w-full px-4 py-2 rounded text-black" required>
+        <button type="submit" class="bg-white text-green-700 px-6 py-2 rounded hover:bg-gray-200">Suscribirme</button>
+    </form>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-6" style="background-color: #5a7c1f; color: white;">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center">
+        <p>&copy; 2025 Organic. Todos los derechos reservados.</p>
+        <div class="space-x-4 mt-4 sm:mt-0">
+            <a th:href="@{/politicas}" class="hover:underline text-white">Políticas de privacidad</a>
+            <a th:href="@{/terminos}" class="hover:underline text-white">Términos y condiciones</a>
+            <a th:href="@{/contacto}" class="hover:underline text-white">Contacto</a>
+        </div>
+    </div>
+</footer>
+
+
+</body>
+</html>
+
