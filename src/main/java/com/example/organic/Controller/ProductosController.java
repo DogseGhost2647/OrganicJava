@@ -26,6 +26,7 @@ import org.springframework.web.servlet.view.document.AbstractPdfView;
 import com.example.organic.Entity.ProductosEntity;
 import com.example.organic.Service.CategoriasService;
 import com.example.organic.Service.CondicionesCabellosService;
+import com.example.organic.Service.EmailMasivoService;
 import com.example.organic.Service.ProductosService;
 import com.example.organic.Service.TiposCabellosService;
 import com.example.organic.util.ListarProductosPdf;
@@ -50,6 +51,9 @@ public class ProductosController {
     
     @Autowired
     private TiposCabellosService tiposCabellosService;
+
+    @Autowired
+    private EmailMasivoService emailMasivoService;
 
     @GetMapping
     public String listarProductos(Model model){
@@ -89,6 +93,11 @@ public class ProductosController {
         } else {
             System.err.println("Imagen vacía o no seleccionada");
         }
+
+        emailMasivoService.enviarCorreoNuevoProducto(
+            producto.getNombre(),
+            producto.getDescripcion()
+        );
 
         productosService.create(producto);
         return "redirect:/productos";

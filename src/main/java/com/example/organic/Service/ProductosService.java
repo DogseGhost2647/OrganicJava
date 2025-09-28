@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.organic.Entity.ProductosEntity;
+import com.example.organic.Entity.UsuarioEntity;
 import com.example.organic.Repository.ProductosRepository;
+import com.example.organic.Repository.UsuarioRepository;
 import com.example.organic.Service.DAO.IDAO;
 
 @Service
@@ -15,6 +17,12 @@ public class ProductosService implements IDAO<ProductosEntity, Long> {
 
     @Autowired
     private ProductosRepository productosRepository;
+
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @Override
     public List<ProductosEntity> getAll() {
@@ -34,6 +42,19 @@ public class ProductosService implements IDAO<ProductosEntity, Long> {
         entity.getCategoria(),
         entity.getTiposCabellos(),
         entity.getCondicionesCabellos()
+        );
+
+        List<String> correos = usuarioRepository.findAll()
+                .stream()
+                .map(UsuarioEntity::getCorreo)
+                .toList();
+
+        emailService.enviarCorreoMasivo(
+            correos,
+            "Nuevo producto disponible: " + entity.getNombre(),
+            "Hola, hemos agregado un nuevo producto: " + entity.getNombre() +
+            "\nDescripción: " + entity.getDescripcion() +
+            "\nPrecio: $" + entity.getPrecio()
         );
 
         if(existente.isPresent()){
