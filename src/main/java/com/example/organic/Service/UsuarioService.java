@@ -1,6 +1,7 @@
 package com.example.organic.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,13 @@ public class UsuarioService implements IDAO<UsuarioEntity, Long> {
 
     @Override
     public UsuarioEntity create(UsuarioEntity entity) {
+        Optional<UsuarioEntity> existente = usuarioRepository.findByCorreo(entity.getCorreo());
+        if (existente.isPresent()) {
+            throw new IllegalArgumentException("Ya existe un usuario con ese correo");
+        }
         return usuarioRepository.save(entity);
     }
+
 
     @Override
     public UsuarioEntity update(UsuarioEntity entity) {

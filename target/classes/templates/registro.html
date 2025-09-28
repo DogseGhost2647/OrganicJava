@@ -33,6 +33,11 @@
                 <input type="password" id="confirmPassword" name="confirmPassword" required class="w-full border rounded px-3 py-2 bg-white bg-opacity-70 focus:outline-none focus:ring-2 focus:ring-green-700" />
             </div>
 
+            <!-- Mensaje de error -->
+            <div th:if="${mensajeError}" style="color: red; margin-top: 10px;">
+                <p th:text="${mensajeError}"></p>
+            </div>
+
             <div class="flex justify-center space-x-4 mt-4">
                 <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800 transition">
                     Registrarse
@@ -41,6 +46,7 @@
                     Iniciar Sesión
                 </a>
             </div>
+
         </form>
     </div>
 </div>

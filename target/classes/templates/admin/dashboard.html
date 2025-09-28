@@ -60,26 +60,33 @@
         <option value="acondicionador">Acondicionador</option>
         <option value="tratamiento">Tratamiento</option>
     </select>
+    
 
-    <a id="btnExportarPdf" href="/productos/list/pdf" target="_blank"
-        class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
-        title="Generar PDF">
-        <img src="/images/pdficono.png" alt="PDF" class="h-6 w-auto">
-        <span>Exportar PDF</span>
+    <a id="btnExportarPdf"
+    href="#"
+    class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
+    title="Generar PDF">
+    <img src="/images/pdficono.png" alt="PDF" class="h-6 w-auto">
+    <span>Exportar PDF</span>
     </a>
     </div>
 
-    <script> const selectCategoria = document.getElementById('categoriaPdf');
+    <script>
+    const selectCategoria = document.getElementById('categoriaPdf');
     const btnPdf = document.getElementById('btnExportarPdf');
 
-    selectCategoria.addEventListener('change', () => {
+    btnPdf.addEventListener('click', (e) => {
+        e.preventDefault();
         const categoria = selectCategoria.value;
-        if (categoria === 'todos') {
-        btnPdf.href = '/productos/list/pdf';
-        } else {
-        btnPdf.href = /productos/list/pdf?categoria=${encodeURIComponent(categoria)};
+        let url = '/productos/list/pdf';
+        if (categoria !== 'todos') {
+            url += `?categoria=${encodeURIComponent(categoria)}`;
         }
-    }); </script>
+        window.open(url, '_blank');
+    });
+    </script>
+
+
     </div>
 </div>
 

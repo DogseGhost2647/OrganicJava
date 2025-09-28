@@ -1,7 +1,10 @@
 package com.example.organic.Controller;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,25 +19,38 @@ public class AuthController {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping("/login")
-    public String mostrarFormularioLogin() {
-        return "login";
+public String mostrarLogin(@RequestParam(required = false) String error,
+                           @RequestParam(required = false) String registroExitoso,
+                           Model model) {
+    if (error != null) {
+        model.addAttribute("mensajeError", "Correo o contraseña incorrectos.");
     }
+    if (registroExitoso != null) {
+        model.addAttribute("mensajeExito", "✅ Registro exitoso. Ahora puedes iniciar sesión.");
+    }
+    return "login";
+}
 
     @PostMapping("/login")
-    public String procesarLogin(@RequestParam String correo, @RequestParam String password) {
-    UsuarioEntity usuario = usuarioRepository.findByCorreo(correo);
+    public String procesarLogin(@RequestParam String correo, 
+                                @RequestParam String password, 
+                                Model model) {
+        Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByCorreo(correo);
 
-    if (usuario != null && usuario.getPassword().equals(password)) {
-        if (usuario.EsAdmin()) {
-            return "redirect:/admin/dashboard";
+        if (usuarioOpt.isPresent() && usuarioOpt.get().getPassword().equals(password)) {
+            UsuarioEntity usuario = usuarioOpt.get();
+            if (usuario.EsAdmin()) {
+                return "redirect:/admin/dashboard";
+            } else {
+                return "redirect:/homeusuario";
+            }
         } else {
-            return "redirect:/homeusuario";
+            // en lugar de 500, vuelve al login con un mensaje de error
+            model.addAttribute("mensajeError", "Correo o contraseña incorrectos.");
+            return "login";
         }
-    } else {
-        return "redirect:/login?error=true";
     }
 
-}
 
 }
 
