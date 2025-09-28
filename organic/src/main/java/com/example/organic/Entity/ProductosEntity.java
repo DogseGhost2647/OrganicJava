@@ -1,5 +1,6 @@
 package com.example.organic.Entity;
 
+import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,8 +39,8 @@ public class ProductosEntity {
     @Column(name= "imagen_url")
     private String imagenUrl;
 
-    @OneToOne(mappedBy = "producto", cascade = CascadeType.ALL)
-    private Carrito_ProductosEntity carrito_productos;
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<Carrito_ProductosEntity> carrito_productos;
 
     @ManyToOne
     @JoinColumn(name = "categoria_id")

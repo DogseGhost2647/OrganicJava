@@ -46,11 +46,11 @@
             <h3 class="text-xl font-semibold mb-2" th:text="${producto.nombre}">Nombre</h3>
             <p class="text-gray-600 mb-2 text-center" th:text="${producto.descripcion}">Descripción</p>
             <p class="text-green-600 font-bold mb-4" th:text="'$' + ${producto.precio}">Precio</p>
-            <a th:href="@{'/carrito/agregar/' + ${producto.id}}"
-               class="inline-block px-5 py-2 rounded text-white font-semibold shadow-md
+            <form th:action="@{'/carrito/agregar/' + ${producto.id}}" method="post" th:object="${itemDTO}"
+                  class="inline-block px-5 py-2 rounded text-white font-semibold shadow-md
                       bg-green-600 hover:bg-green-700 transition-colors duration-300 text-center">
-               Agregar al carrito
-            </a>
+                Agregar al carrito
+            </form>
         </div>
     </div>
 </div>

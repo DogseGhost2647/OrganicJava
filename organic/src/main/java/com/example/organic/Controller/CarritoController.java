@@ -24,7 +24,7 @@ public class CarritoController {
 
     }
 
-    @GetMapping("/{usuarioId")
+    @GetMapping("/{usuarioId}")
     public String verCarrito(@PathVariable Long usuarioId, Model model) {
 
         CarritoResponseDTO carritoDTO = carritoService.obtenerCarritoDTO(usuarioId);

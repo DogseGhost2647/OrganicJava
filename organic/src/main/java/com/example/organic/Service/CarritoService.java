@@ -1,6 +1,5 @@
 package com.example.organic.Service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import com.example.organic.DTO.CarritoItemRequestDTO;
@@ -80,7 +79,7 @@ public class CarritoService {
         CarritoResponseDTO carritoDTO = new CarritoResponseDTO();
         carritoDTO.setCarritoId(carrito.getId());
 
-        carritoDTO.setProductos(carrito.getItems().stream
+        carritoDTO.setProductos(carrito.getItems().stream()
                 .map(item -> {
             ProductoEnCarritoDTO dto = new ProductoEnCarritoDTO();
             dto.setNombreProducto(item.getProducto().getNombre());

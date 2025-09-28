@@ -1,10 +1,7 @@
 package com.example.organic.Entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,15 +9,16 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "carrito_productos")
-@IdClass(Carrito_ProductosId.class)
 public class Carrito_ProductosEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(name = "carrito_id")
     private CarritoEntity carrito;
 
-    @Id
     @ManyToOne
     @JoinColumn(name = "productos_id")
     private ProductosEntity producto;
