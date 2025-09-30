@@ -1,6 +1,7 @@
 package com.example.organic.Controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +10,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.Map;
+
+import com.example.organic.Entity.CategoriasEntity;
+import com.example.organic.Entity.CondicionesCabellosEntity;
+import com.example.organic.Entity.TiposCabellosEntity;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -30,8 +36,9 @@ import com.example.organic.Service.EmailMasivoService;
 import com.example.organic.Service.ProductosService;
 import com.example.organic.Service.TiposCabellosService;
 import com.example.organic.util.ListarProductosPdf;
-
-
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
 
 @Controller
 @RequestMapping("/productos")
@@ -152,8 +159,82 @@ public class ProductosController {
         return new ModelAndView(listaProductosPdfView, model);
     }
 
+    @GetMapping("/upload")
+    public String showUploadForm(Model model) {
 
+        return "upload";
 
+    }
+
+    @PostMapping("/upload")
+    public String uploadExcel(@RequestParam("file") MultipartFile file, Model model) {
+
+        if (file.isEmpty()) {
+            model.addAttribute("message", "Por favor, seleccione un archivo.");
+            return "upload";
+        }
+
+        if (!file.getOriginalFilename().endsWith(".xlsx")) {
+            model.addAttribute("message", "Solo se permiten archivos .xlsx.");
+            return "upload";
+        }
+
+        long productosInsertados = 0;
+
+        try (InputStream is = file.getInputStream()) {
+            Workbook workbook = new XSSFWorkbook(is);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            boolean isHeader = true;
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+
+                }
+
+                if (row == null || row.getCell(0) == null) {
+                    break;
+
+                }
+
+                    ProductosEntity nuevoProducto = new ProductosEntity();
+
+                Long categoria_id = (long) row.getCell(6).getNumericCellValue();
+                CategoriasEntity categoria = categoriasService.getById(categoria_id);
+                nuevoProducto.setCategoria(categoria);
+
+                Long condiciones_cabellos_id = (long) row.getCell(7).getNumericCellValue();
+                CondicionesCabellosEntity condiciones_cabellos = condicionesCabellosService.getById(condiciones_cabellos_id);
+                nuevoProducto.setCondicionesCabellos(condiciones_cabellos);
+
+                Long tipos_cabellos_id = (long) row.getCell(8).getNumericCellValue();
+                TiposCabellosEntity tipos_cabellos = tiposCabellosService.getById(tipos_cabellos_id);
+                nuevoProducto.setTiposCabellos(tipos_cabellos);
+
+                // IMPORTANTE configurar esto desp -> if (categoria == null)
+
+                nuevoProducto.setNombre(row.getCell(0).getStringCellValue());
+                nuevoProducto.setDescripcion(row.getCell(1).getStringCellValue());
+                nuevoProducto.setPrecio(row.getCell(2).getNumericCellValue());
+                nuevoProducto.setCantidadDisponible((int) row.getCell(3).getNumericCellValue());
+                nuevoProducto.setDisponible(row.getCell(4).getBooleanCellValue());
+                nuevoProducto.setImagenUrl(row.getCell(5).getStringCellValue());
+
+                productosService.create(nuevoProducto);
+                productosInsertados++;
+
+                }
+
+            model.addAttribute("message", "Carga masiva exitosa. Productos insertados: " + productosInsertados);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Error durante la carga: " + e.getMessage());
+        }
+
+        return "upload";
+    }
 
 }
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cargar inicial de productos</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+<!-- NAVBAR -->
+<nav class="shadow mb-4" style="background-color: #6c9724;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
+        <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
+        <div class="space-x-4">
+            <a href="#productos" class="text-white hover:underline">Productos</a>
+            <a th:href="@{/blog}" class="text-white hover:underline">Blog</a>
+            <a th:href="@{/contacto}" class="text-white hover:underline">Contacto</a>
+            <a th:href="@{/admin/dashboard}" class="text-white hover:underline">Dashboard</a>
+            <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
+        </div>
+    </div>
+</nav>
+
+<h1>Carga Masiva de Productos (Excel XLSX)</h1>
+
+<p>Por favor, suba el archivo con la estructura de datos correcta.</p>
+<form th:action="@{/productos/upload}" method="POST" enctype="multipart/form-data">
+    <label for="fileInput">Seleccionar Archivo XLSX:</label>
+    <input type="file" name="file" id="fileInput" accept=".xlsx" required>
+    <br>
+
+    <br>
+    <button type="submit"
+            class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+        Subir y Procesar Productos</button>
+</form>
+
+<hr>
+
+<div th:if="${message}">
+    <p style="color: green;" th:text="${message}"></p>
+</div>
+
+</body>
+</html>
