@@ -14,6 +14,8 @@ import java.util.Map;
 import com.example.organic.Entity.CategoriasEntity;
 import com.example.organic.Entity.CondicionesCabellosEntity;
 import com.example.organic.Entity.TiposCabellosEntity;
+import com.example.organic.Repository.ProductosRepository;
+
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,7 +37,11 @@ import com.example.organic.Service.CondicionesCabellosService;
 import com.example.organic.Service.EmailMasivoService;
 import com.example.organic.Service.ProductosService;
 import com.example.organic.Service.TiposCabellosService;
+import com.example.organic.util.EstadisticasProductosPdf;
 import com.example.organic.util.ListarProductosPdf;
+
+import jakarta.servlet.http.HttpServletResponse;
+
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
@@ -61,6 +67,9 @@ public class ProductosController {
 
     @Autowired
     private EmailMasivoService emailMasivoService;
+
+    @Autowired
+    private ProductosRepository productosRepository;
 
     @GetMapping
     public String listarProductos(Model model){
@@ -235,6 +244,28 @@ public class ProductosController {
 
         return "upload";
     }
+    
+
+    @GetMapping("/estadisticas/pdf")
+    public void generarEstadisticasPdf(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=estadisticas_productos.pdf");
+
+        List<ProductosEntity> productos = productosRepository.findAll();
+
+        if (productos == null || productos.isEmpty()) {
+            response.getWriter().write("No hay productos disponibles para generar estadísticas.");
+            return;
+        }
+
+        EstadisticasProductosPdf exporter = new EstadisticasProductosPdf(productos);
+        exporter.export(response);
+    }
+
+
+
+
+
 
 }
 

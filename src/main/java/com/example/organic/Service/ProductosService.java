@@ -49,13 +49,20 @@ public class ProductosService implements IDAO<ProductosEntity, Long> {
                 .map(UsuarioEntity::getCorreo)
                 .toList();
 
-        emailService.enviarCorreoMasivo(
-            correos,
-            "Nuevo producto disponible: " + entity.getNombre(),
-            "Hola, hemos agregado un nuevo producto: " + entity.getNombre() +
-            "\nDescripción: " + entity.getDescripcion() +
-            "\nPrecio: $" + entity.getPrecio()
-        );
+        new Thread(() -> {
+            try {
+                emailService.enviarCorreoMasivo(
+                    correos,
+                    "Nuevo producto disponible: " + entity.getNombre(),
+                    "Hola, hemos agregado un nuevo producto: " + entity.getNombre() +
+                    "\nDescripción: " + entity.getDescripcion() +
+                    "\nPrecio: $" + entity.getPrecio()
+                );
+            } catch (Exception e) {
+                System.err.println("❌ Error enviando correos masivos: " + e.getMessage());
+            }
+        }).start();
+
 
         if(existente.isPresent()){
             ProductosEntity productoExistente = existente.get();

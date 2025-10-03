@@ -1,114 +1,133 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Dashboard - Panel de Administración</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-50">
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Dashboard - Panel de Administración</title>
+        <link rel="stylesheet" th:href="@{/css/styles.css}">
+        <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-gray-50">
 
-<!-- NAVBAR -->
-<nav class="shadow mb-6" style="background-color: #6c9724;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-            <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
-            <div class="space-x-4">
-                <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
+    <!-- NAVBAR -->
+    <nav class="shadow mb-6" style="background-color: #6c9724;">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
+                <div class="space-x-4">
+                    <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
+                </div>
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<!-- CONTENIDO PRINCIPAL -->
-<div class="max-w-7xl mx-auto px-4">
+    <!-- CONTENIDO PRINCIPAL -->
+    <div class="max-w-7xl mx-auto px-4">
 
-    <h1 class="text-3xl font-bold mb-6 text-center text-green-700">Panel de Administración</h1>
+        <h1 class="text-3xl font-bold mb-6 text-center text-green-700">Panel de Administración</h1>
 
-    <!-- Estadísticas rápidas -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div class="bg-green-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-            <span class="text-4xl font-bold text-green-700" th:text="${totalProductos}">0</span>
-            <span class="text-gray-700 mt-2">Productos Totales</span>
-        </div>
-        <div class="bg-yellow-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-            <span class="text-4xl font-bold text-yellow-600" th:text="${ventasHoy}">0</span>
-            <span class="text-gray-700 mt-2">Ventas Hoy</span>
-        </div>
-        <div class="bg-amber-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-            <span class="text-4xl font-bold text-amber-700" th:text="${usuariosRegistrados}">0</span>
-            <span class="text-gray-700 mt-2">Usuarios Registrados</span>
-        </div>
-    </div>
-
-<!-- Accesos rápidos -->
-<div class="mb-12">
-    <h2 class="text-2xl font-semibold mb-4 text-green-700">Accesos Rápidos</h2>
-    <div class="flex flex-wrap gap-4">
-        <a th:href="@{/productos}"
-           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-           Lista de productos
-        </a>
-        <a th:href="@{/productos/crear}"
-           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-           Crear Nuevo Producto
-        </a>
-        <a th:href="@{/productos/upload}"
-           class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
-            Cargar Productos desde Exel
-        </a>
-        <div class="flex items-center gap-4">
-    <label for="categoriaPdf" class="font-semibold text-green-700">Selecciona categoría:</label>
-    <select id="categoriaPdf" class="border border-green-600 rounded px-2 py-1">
-        <option value="todos">Todas las categorías</option>
-        <option value="shampoo">Shampoo</option>
-        <option value="acondicionador">Acondicionador</option>
-        <option value="tratamiento">Tratamiento</option>
-    </select>
-    
-
-    <a id="btnExportarPdf"
-    href="#"
-    class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
-    title="Generar PDF">
-    <img src="/images/pdficono.png" alt="PDF" class="h-6 w-auto">
-    <span>Exportar PDF</span>
-    </a>
-    </div>
-
-    <script>
-    const selectCategoria = document.getElementById('categoriaPdf');
-    const btnPdf = document.getElementById('btnExportarPdf');
-
-    btnPdf.addEventListener('click', (e) => {
-        e.preventDefault();
-        const categoria = selectCategoria.value;
-        let url = '/productos/list/pdf';
-        if (categoria !== 'todos') {
-            url += `?categoria=${encodeURIComponent(categoria)}`;
-        }
-        window.open(url, '_blank');
-    });
-    </script>
-
-
-    </div>
-</div>
-
-
-    <!-- Productos en Grid -->
-    <div id="productos" class="max-w-6xl mx-auto px-4 py-12">
-        <h2 class="text-3xl font-bold text-center mb-8 text-green-700">Nuestros Productos</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            <div th:each="producto : ${productos}" class="bg-white p-4 rounded shadow hover:shadow-md transition flex flex-col items-center">
-                <img th:src="@{${producto.imagenUrl}}" alt="Imagen del producto" class="w-48 h-48 object-cover mx-auto mb-4">
-                <h3 class="text-xl font-semibold mb-2 text-green-700" th:text="${producto.nombre}">Nombre</h3>
-                <p class="text-gray-600 mb-2 text-center" th:text="${producto.descripcion}">Descripción</p>
-                <p class="text-green-600 font-bold mb-4" th:text="'$' + ${producto.precio}">Precio</p>
+        <!-- Estadísticas rápidas -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+            <div class="bg-green-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
+                <span class="text-4xl font-bold text-green-700" th:text="${totalProductos}">0</span>
+                <span class="text-gray-700 mt-2">Productos Totales</span>
+            </div>
+            <div class="bg-yellow-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
+                <span class="text-4xl font-bold text-yellow-600" th:text="${ventasHoy}">0</span>
+                <span class="text-gray-700 mt-2">Ventas Hoy</span>
+            </div>
+            <div class="bg-amber-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
+                <span class="text-4xl font-bold text-amber-700" th:text="${usuariosRegistrados}">0</span>
+                <span class="text-gray-700 mt-2">Usuarios Registrados</span>
             </div>
         </div>
+
+    <!-- Accesos rápidos -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-semibold mb-4 text-green-700">Accesos Rápidos</h2>
+        <div class="flex flex-wrap gap-4">
+            <a th:href="@{/productos}"
+            class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+            Lista de productos
+            </a>
+            <a th:href="@{/productos/crear}"
+            class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+            Crear Nuevo Producto
+            </a>
+            <a th:href="@{/productos/upload}"
+            class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition">
+                Cargar Productos desde Exel
+            </a>
+            <div class="flex items-center gap-4">
+        <label for="categoriaPdf" class="font-semibold text-green-700">Selecciona categoría:</label>
+        <select id="categoriaPdf" class="border border-green-600 rounded px-2 py-1">
+            <option value="todos">Todas las categorías</option>
+            <option value="shampoo">Shampoo</option>
+            <option value="acondicionador">Acondicionador</option>
+            <option value="tratamiento">Tratamiento</option>
+        </select>
+        
+
+        <a id="btnExportarPdf"
+        href="#"
+        class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
+        title="Generar PDF">
+        <img src="/images/pdficono.png" alt="PDF" class="h-6 w-auto">
+        <span>Exportar PDF</span>
+        </a>
+
+            <!-- Botón para generar estadísticas -->
+        <a id="btnEstadisticasPdf"
+        href="#"
+        class="bg-red-600 text-white px-4 py-2 rounded shadow hover:bg-red-700 transition flex items-center gap-2"
+        title="Generar estadísticas PDF">
+            <img src="/images/pdficono.png" alt="Gráfica" class="h-6 w-auto">
+            <span>Estadísticas</span>
+        </a>
+
+        </div>
+
+        <script>
+        const selectCategoria = document.getElementById('categoriaPdf');
+        const btnPdf = document.getElementById('btnExportarPdf');
+        const btnEstadisticas = document.getElementById('btnEstadisticasPdf'); // 👈 faltaba esto
+
+        btnPdf.addEventListener('click', (e) => {
+            e.preventDefault();
+            const categoria = selectCategoria.value;
+            let url = '/productos/list/pdf';
+            if (categoria !== 'todos') {
+                url += `?categoria=${encodeURIComponent(categoria)}`;
+            }
+            window.open(url, '_blank');
+        });
+
+        btnEstadisticas.addEventListener('click', (e) => {
+            e.preventDefault();
+            const url = '/productos/estadisticas/pdf'; // 👈 esta es la ruta del controlador
+            window.open(url, '_blank');
+        });
+        </script>
+
+
+
+        </div>
     </div>
 
-</div>
 
-</body>
-</html>
+        <!-- Productos en Grid -->
+        <div id="productos" class="max-w-6xl mx-auto px-4 py-12">
+            <h2 class="text-3xl font-bold text-center mb-8 text-green-700">Nuestros Productos</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                <div th:each="producto : ${productos}" class="bg-white p-4 rounded shadow hover:shadow-md transition flex flex-col items-center">
+                    <img th:src="@{${producto.imagenUrl}}" alt="Imagen del producto" class="w-48 h-48 object-cover mx-auto mb-4">
+                    <h3 class="text-xl font-semibold mb-2 text-green-700" th:text="${producto.nombre}">Nombre</h3>
+                    <p class="text-gray-600 mb-2 text-center" th:text="${producto.descripcion}">Descripción</p>
+                    <p class="text-green-600 font-bold mb-4" th:text="'$' + ${producto.precio}">Precio</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    </body>
+    </html>
