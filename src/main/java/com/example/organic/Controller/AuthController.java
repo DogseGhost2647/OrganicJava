@@ -45,7 +45,6 @@ public String mostrarLogin(@RequestParam(required = false) String error,
                 return "redirect:/homeusuario";
             }
         } else {
-            // en lugar de 500, vuelve al login con un mensaje de error
             model.addAttribute("mensajeError", "Correo o contraseña incorrectos.");
             return "login";
         }
