@@ -1,5 +1,6 @@
 package com.example.organic.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import com.example.organic.DTO.CarritoItemRequestDTO;
@@ -49,9 +50,16 @@ public class CarritoService {
     //metodo para obtener el carritp de un usuario
     public CarritoEntity obtenerCarrito() {
         UsuarioEntity usuario = obtenerUsuarioLogueado();
+
         return carritoRepository.findByUsuarioId(usuario.getId())
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado para el usuario " + usuario.getId()));
+                .orElseGet(() -> {
+                    CarritoEntity nuevo = new CarritoEntity();
+                    nuevo.setUsuario(usuario);
+                    nuevo.setItems(new ArrayList<>());
+                    return carritoRepository.save(nuevo);
+                });
     }
+
 
 
     //metodo para añadir productos al carrito

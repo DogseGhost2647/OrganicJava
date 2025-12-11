@@ -2,7 +2,13 @@ package com.example.organic.Controller;
 
 import com.example.organic.DTO.CarritoItemRequestDTO;
 import com.example.organic.DTO.CarritoResponseDTO;
+import com.example.organic.Entity.CarritoEntity;
+import com.example.organic.Entity.UsuarioEntity;
+import com.example.organic.Repository.CarritoRepository;
+import com.example.organic.Repository.UsuarioRepository;
 import com.example.organic.Service.CarritoService;
+
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
