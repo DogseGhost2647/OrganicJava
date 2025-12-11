@@ -10,10 +10,10 @@
 <!-- NAVBAR -->
 <nav class="shadow mb-4" style="background-color: #6c9724;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-        <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
+        <a th:href="@{/homeusuario}" class="text-xl font-semibold text-white">Organic</a>
         <div class="space-x-4">
             <a href="#productos" class="text-white hover:underline">Productos</a>
-            <a th:href="@{/carrito/2}" class="text-white hover:underline">Carrito</a>
+            <a th:href="@{/carrito}" class="text-white hover:underline">Carrito</a>
             <a th:href="@{/blog}" class="text-white hover:underline">Blog</a>
             <a th:href="@{/contacto}" class="text-white hover:underline">Contacto</a>
             <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
@@ -46,11 +46,11 @@
             <h3 class="text-xl font-semibold mb-2" th:text="${producto.nombre}">Nombre</h3>
             <p class="text-gray-600 mb-2 text-center" th:text="${producto.descripcion}">Descripción</p>
             <p class="text-green-600 font-bold mb-4" th:text="'$' + ${producto.precio}">Precio</p>
-            <form th:action="@{'/carrito/agregar/' + ${producto.id}}" method="post" th:object="${itemDTO}"
-               class="inline-block px-5 py-2 rounded text-white font-semibold shadow-md
-                      bg-green-600 hover:bg-green-700 transition-colors duration-300 text-center">
-               Agregar al carrito
-            </form>
+            <form th:action="@{/carrito/agregar}" method="post">
+            <input type="hidden" name="productoId" th:value="${producto.id}" />
+            <input type="number" name="cantidad" value="1" min="1" />
+            <button type="submit">Añadir al carrito</button>
+        </form>
         </div>
     </div>
 </div>

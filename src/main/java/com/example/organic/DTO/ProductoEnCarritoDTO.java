@@ -11,6 +11,8 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ProductoEnCarritoDTO {
 
+    private Long productoId;
+
     private String nombreProducto;
 
     private double precio;

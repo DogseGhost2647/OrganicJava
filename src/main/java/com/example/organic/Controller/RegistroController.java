@@ -29,7 +29,7 @@ public class RegistroController {
     @PostMapping("/registro")
     public String procesarRegistro(@ModelAttribute UsuarioEntity usuario, Model model) {
         try {
-            usuarioService.create(usuario);
+            usuarioService.registrar(usuario);
             return "redirect:/login?registroExitoso";
         } catch (IllegalArgumentException e) {
             // Captura cuando el correo ya existe
@@ -44,10 +44,4 @@ public class RegistroController {
         }
     }
 
-
-
-
-
-
-    
 }

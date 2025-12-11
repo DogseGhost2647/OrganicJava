@@ -10,14 +10,13 @@
 
 <!-- NAVBAR -->
 <nav class="shadow mb-4" style="background-color: #6c9724;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between h-16 items-center">
-        <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
-        <div class="space-x-4">
-            <a href="#productos" class="text-white hover:underline">Productos</a>
-            <a th:href="@{/blog}" class="text-white hover:underline">Blog</a>
-            <a th:href="@{/contacto}" class="text-white hover:underline">Contacto</a>
-            <a th:href="@{/admin/dashboard}" class="text-white hover:underline">Dashboard</a>
-            <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+            <a th:href="@{/admin/dashboard}" class="text-xl font-semibold text-white">Organic</a>
+            <div class="space-x-4">
+                <a th:href="@{/productos}" class="text-white hover:underline">Lista de Productos</a>
+                <a th:href="@{/logout}" class="text-red-100 hover:text-white">Cerrar sesión</a>
+            </div>
         </div>
     </div>
 </nav>

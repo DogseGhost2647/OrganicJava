@@ -8,7 +8,6 @@ import java.util.Optional;
 @Repository
 public interface Carrito_ProductosRepository extends JpaRepository<Carrito_ProductosEntity, Long> {
 
-    //@Override
-    Optional<Carrito_ProductosRepository> findByCarritoIdAndProductoId(Long carritoId, Long productoId);
+    Optional<Carrito_ProductosEntity> findByCarritoIdAndProductoId(Long carritoId, Long productoId);
 
 }
