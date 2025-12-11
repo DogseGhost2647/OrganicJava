@@ -42,7 +42,6 @@
             <h3 th:text="${producto.nombre}">Nombre</h3>
             <p th:text="${producto.descripcion}">Descripción</p>
             <p class="precio" th:text="'$' + ${producto.precio}">Precio</p>
-            <a th:href="@{'/carrito/agregar/' + ${producto.id}}" class="btn-secondary">Agregar al carrito</a>
         </div>
     </div>
 </section>
