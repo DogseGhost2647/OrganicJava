@@ -16,7 +16,7 @@
                 <!-- IZQUIERDA: Logo + Organic -->
                 <div class="flex items-center space-x-3">
                     <img class="favicon h-8 w-8" th:src="@{/images/favicon.png}" alt="logo">
-                    <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
+                    <a th:href="@{/admin/dashboard}" class="text-xl font-semibold text-white">Organic</a>
                 </div>
 
                 <!-- DERECHA: Cerrar sesión -->
@@ -100,7 +100,7 @@
         <script>
         const selectCategoria = document.getElementById('categoriaPdf');
         const btnPdf = document.getElementById('btnExportarPdf');
-        const btnEstadisticas = document.getElementById('btnEstadisticasPdf'); // 👈 faltaba esto
+        const btnEstadisticas = document.getElementById('btnEstadisticasPdf');
 
         btnPdf.addEventListener('click', (e) => {
             e.preventDefault();
@@ -114,7 +114,7 @@
 
         btnEstadisticas.addEventListener('click', (e) => {
             e.preventDefault();
-            const url = '/productos/estadisticas/pdf'; // 👈 esta es la ruta del controlador
+            const url = '/productos/estadisticas/pdf';
             window.open(url, '_blank');
         });
         </script>

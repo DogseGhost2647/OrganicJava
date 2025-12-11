@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.organic.Entity.UsuarioEntity;
+import com.example.organic.Entity.CarritoEntity;
 import com.example.organic.Repository.UsuarioRepository;
+import com.example.organic.Repository.CarritoRepository;
 import com.example.organic.Service.DAO.IDAO;
 
 @Service
@@ -15,6 +17,8 @@ public class UsuarioService implements IDAO<UsuarioEntity, Long> {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    @Autowired
+    private CarritoRepository carritoRepository;
 
     @Override
     public List<UsuarioEntity> getAll() {
@@ -54,5 +58,23 @@ public class UsuarioService implements IDAO<UsuarioEntity, Long> {
     public long contarUsuarios() {
     return usuarioRepository.count();
     }
+
+    public UsuarioEntity registrar(UsuarioEntity user) {
+        UsuarioEntity usuarioGuardado = usuarioRepository.save(user);
+
+        CarritoEntity carrito = new CarritoEntity();
+        carrito.setUsuario(usuarioGuardado);
+        carritoRepository.save(carrito);
+
+        return usuarioGuardado;
+    }
+
+    public Long obtenerIdPorUsername(String username) {
+        UsuarioEntity usuario = usuarioRepository.findByCorreo(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+
+        return usuario.getId();
+    }
+
 
 }

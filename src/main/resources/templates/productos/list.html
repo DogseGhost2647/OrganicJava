@@ -4,20 +4,18 @@
     <title>Lista de Productos</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="shadow mb-6" style="background-color: #6c9724;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+<!-- NAVBAR -->
+<nav class="shadow mb-6" style="background-color: #6c9724;">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
 
-                <!-- IZQUIERDA: Logo + Organic -->
-                <div class="flex items-center space-x-3">
-                    <img class="favicon h-8 w-8" th:src="@{/images/favicon.png}" alt="logo">
-                    <a th:href="@{/home}" class="text-xl font-semibold text-white">Organic</a>
-                </div>
+            <!-- IZQUIERDA: Logo + Organic -->
+            <div class="flex items-center space-x-3">
+                <img class="favicon h-8 w-8" th:src="@{/images/favicon.png}" alt="logo">
+                <a th:href="@{/admin/dashboard}" class="text-xl font-semibold text-white">Organic</a>
 
                 <!-- DERECHA: Cerrar sesión -->
                 <div class="flex items-center space-x-4">
@@ -28,9 +26,9 @@
                         Cerrar sesión
                     </a>
                 </div>
-
             </div>
         </div>
+    </div>
     </nav>
 
     <!-- CONTENIDO -->

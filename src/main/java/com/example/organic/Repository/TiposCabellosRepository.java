@@ -8,4 +8,6 @@ import com.example.organic.Entity.TiposCabellosEntity;
 @Repository
 public interface TiposCabellosRepository extends JpaRepository<TiposCabellosEntity, Long>{
 
+    boolean existsByNombre(String nombre);
+
 }

@@ -12,10 +12,11 @@
 <nav class="navbar">
     <img class="favicon" src="images/favicon.png" alt="logo">
     <div class="navbar-container">
-        
-        <a th:href="@{/}" class="navbar-brand">Organic</a>
+
+        <a th:href="@{/homeusuario}" class="navbar-brand">Organic</a>
         <div class="navbar-links">
             <a href="#productos">Productos</a>
+            <a th:href="@{/carrito}" class="text-white hover:underline">Carrito</a>
             <a href="#contacto">Contacto</a>
             <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
         </div>
@@ -41,7 +42,11 @@
             <h3 th:text="${producto.nombre}">Nombre</h3>
             <p th:text="${producto.descripcion}">Descripción</p>
             <p class="precio" th:text="'$' + ${producto.precio}">Precio</p>
-            <a th:href="@{'/carrito/agregar/' + ${producto.id}}" class="btn-secondary">Agregar al carrito</a>
+            <form th:action="@{/carrito/agregar}" method="post">
+                <input type="hidden" name="productoId" th:value="${producto.id}" />
+                <input type="number" name="cantidad" value="1" min="1" />
+                <button type="submit">Añadir al carrito</button>
+            </form>
         </div>
     </div>
 </section>

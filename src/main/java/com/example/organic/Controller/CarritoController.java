@@ -1,9 +1,9 @@
 package com.example.organic.Controller;
 
-//import ch.qos.logback.core.model.Model;
 import com.example.organic.DTO.CarritoItemRequestDTO;
 import com.example.organic.DTO.CarritoResponseDTO;
 import com.example.organic.Service.CarritoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,21 +16,32 @@ public class CarritoController {
     @Autowired
     private CarritoService carritoService;
 
-    @PostMapping("/agregar/{usuarioId}")
-    public String agregarProducto(@PathVariable Long usuarioId, @ModelAttribute CarritoItemRequestDTO itemDTO) {
-
-        carritoService.agregarProductos(usuarioId, itemDTO);
-        return "redirect:/carrito/" + usuarioId;
-
-    }
-
-    @GetMapping("/{usuarioId}")
-    public String verCarrito(@PathVariable Long usuarioId, Model model) {
-
-        CarritoResponseDTO carritoDTO = carritoService.obtenerCarritoDTO(usuarioId);
+    // Mostrar carrito
+    @GetMapping
+    public String verCarrito(Model model) {
+        CarritoResponseDTO carritoDTO = carritoService.obtenerCarritoDTO();
         model.addAttribute("carrito", carritoDTO);
         return "carrito/carrito";
-
     }
 
+    // Agregar producto
+    @PostMapping("/agregar")
+    public String agregarProducto(@ModelAttribute CarritoItemRequestDTO itemDTO) {
+        carritoService.agregarProductos(itemDTO);
+        return "redirect:/carrito";
+    }
+
+    // Actualizar cantidad
+    @PostMapping("/actualizar")
+    public String actualizarProducto(@ModelAttribute CarritoItemRequestDTO itemDTO) {
+        carritoService.actualizarCantidad(itemDTO);
+        return "redirect:/carrito";
+    }
+
+    // Eliminar producto
+    @PostMapping("/eliminar/{productoId}")
+    public String eliminarProducto(@PathVariable Long productoId) {
+        carritoService.eliminarProducto(productoId);
+        return "redirect:/carrito";
+    }
 }
