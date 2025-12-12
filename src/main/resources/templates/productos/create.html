@@ -5,19 +5,19 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="shadow mb-4" style="background-color: #6c9724;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-            <a th:href="@{/}" class="text-xl font-semibold text-white">Organic</a>
-            <div class="space-x-4">
-                <a th:href="@{/productos}" class="text-white hover:underline"></a>
-                <a th:href="@{/productos}" class="text-white hover:underline">Lista de Productos</a>
-                <a th:href="@{/logout}" class="text-red-100 hover:text-white">Cerrar sesión</a>
-            </div>
+<nav class="navbar">
+    <img class="favicon" src="../images/favicon.png" alt="logo">
+    <div class="navbar-container">
+
+        <a th:href="@{/admin/dashboard}" class="navbar-brand">Organic</a>
+        <div class="navbar-links">
+            <a th:href="@{/admin/dashboard}" class="text-white hover:underline">Dashboard</a>
+            <a th:href="@{/logout}" class="register">Cerra Sesión</a>
         </div>
     </div>
 </nav>

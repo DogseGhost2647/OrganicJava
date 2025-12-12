@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <title>Resultados de búsqueda</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <img class="favicon" src="/images/favicon.png">
+  <div class="navbar-container">
+
+    <a th:href="@{/homeusuario}" class="navbar-brand">Organic</a>
+
+    <form th:action="@{/usuario/buscar}" method="get" class="search-bar">
+      <input type="text" name="q" placeholder="Buscar productos..." th:value="${query}">
+      <button type="submit">🔍</button>
+    </form>
+
+    <div class="navbar-links">
+      <a th:href="@{/carrito}" class="text-white hover:underline">Carrito</a>
+      <a th:href="@{/logout}" class="register">Cerrar sesión</a>
+    </div>
+  </div>
+</nav>
+
+<section class="productos">
+  <h2>Resultados para "<span th:text="${query}"></span>"</h2>
+
+  <div class="productos-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 place-items-center">
+  <div th:each="producto : ${resultados}" class="producto-card">
+      <img th:src="@{${producto.imagenUrl}}">
+      <h3 th:text="${producto.nombre}"></h3>
+      <p th:text="${producto.descripcion}"></p>
+      <p class="precio" th:text="'$' + ${producto.precio}"></p>
+
+      <form th:action="@{/carrito/agregar}" method="post">
+        <input type="hidden" name="productoId" th:value="${producto.id}">
+        <input type="number" name="cantidad" value="1" min="1"
+               style="margin-bottom: 10px;">
+        <button class="btn-secondary">Añadir al carrito</button>
+      </form>
+    </div>
+  </div>
+
+  <div th:if="${resultados.size() == 0}">
+    <p>No se encontraron productos.</p>
+  </div>
+</section>
+
+</body>
+</html>

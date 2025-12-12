@@ -1,6 +1,7 @@
 package com.example.organic.Controller;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -9,6 +10,13 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.Map;
+
+import com.example.organic.Entity.CategoriasEntity;
+import com.example.organic.Entity.CondicionesCabellosEntity;
+import com.example.organic.Entity.TiposCabellosEntity;
+import com.example.organic.Repository.ProductosRepository;
+
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -29,9 +37,14 @@ import com.example.organic.Service.CondicionesCabellosService;
 import com.example.organic.Service.EmailMasivoService;
 import com.example.organic.Service.ProductosService;
 import com.example.organic.Service.TiposCabellosService;
+import com.example.organic.util.EstadisticasProductosPdf;
 import com.example.organic.util.ListarProductosPdf;
 
+import jakarta.servlet.http.HttpServletResponse;
 
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
 
 @Controller
 @RequestMapping("/productos")
@@ -54,6 +67,9 @@ public class ProductosController {
 
     @Autowired
     private EmailMasivoService emailMasivoService;
+
+    @Autowired
+    private ProductosRepository productosRepository;
 
     @GetMapping
     public String listarProductos(Model model){
@@ -105,18 +121,52 @@ public class ProductosController {
 
 
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEdicion(@PathVariable Long id, Model model){
+    public String mostrarFormularioEdicion(@PathVariable Long id, Model model) {
         ProductosEntity producto = productosService.getById(id);
+
         model.addAttribute("producto", producto);
         model.addAttribute("categoria", categoriasService.getAll());
         model.addAttribute("condicionesCabellos", condicionesCabellosService.getAll());
         model.addAttribute("tiposCabellos", tiposCabellosService.getAll());
+
         return "productos/editar";
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizarProducto(@PathVariable Long id, @ModelAttribute ProductosEntity producto) {
+    public String actualizarProducto(
+            @PathVariable Long id,
+            @ModelAttribute ProductosEntity producto,
+            @RequestParam("imagen") MultipartFile imagen
+    ) {
+        ProductosEntity productoActual = productosService.getById(id);
+
+        producto.setCategoria(categoriasService.getById(producto.getCategoria().getId()));
+        producto.setCondicionesCabellos(condicionesCabellosService.getById(producto.getCondicionesCabellos().getId()));
+        producto.setTiposCabellos(tiposCabellosService.getById(producto.getTiposCabellos().getId()));
+
         producto.setId(id);
+
+        if (!imagen.isEmpty()) {
+            try {
+                String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
+                Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
+                Path rutaArchivo = uploadDir.resolve(nombreArchivo);
+
+                Files.createDirectories(uploadDir);
+                imagen.transferTo(rutaArchivo.toFile());
+
+                producto.setImagenUrl("/uploads/" + nombreArchivo);
+
+                System.out.println("📸 Imagen ACTUALIZADA en: " + rutaArchivo.toAbsolutePath());
+
+            } catch (IOException e) {
+                System.err.println("Error actualizando imagen:");
+                e.printStackTrace();
+            }
+        } else {
+            producto.setImagenUrl(productoActual.getImagenUrl());
+        }
+
         productosService.update(producto);
         return "redirect:/productos";
     }
@@ -152,8 +202,99 @@ public class ProductosController {
         return new ModelAndView(listaProductosPdfView, model);
     }
 
+    @GetMapping("/upload")
+    public String showUploadForm(Model model) {
 
+        return "upload";
 
+    }
+
+    @PostMapping("/upload")
+    public String uploadExcel(@RequestParam("file") MultipartFile file, Model model) {
+
+        if (file.isEmpty()) {
+            model.addAttribute("message", "Por favor, seleccione un archivo.");
+            return "upload";
+        }
+
+        if (!file.getOriginalFilename().endsWith(".xlsx")) {
+            model.addAttribute("message", "Solo se permiten archivos .xlsx.");
+            return "upload";
+        }
+
+        long productosInsertados = 0;
+
+        try (InputStream is = file.getInputStream()) {
+            Workbook workbook = new XSSFWorkbook(is);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            boolean isHeader = true;
+            for (Row row : sheet) {
+                if (isHeader) {
+                    isHeader = false;
+                    continue;
+
+                }
+
+                if (row == null || row.getCell(0) == null) {
+                    break;
+
+                }
+
+                    ProductosEntity nuevoProducto = new ProductosEntity();
+
+                Long categoria_id = (long) row.getCell(6).getNumericCellValue();
+                CategoriasEntity categoria = categoriasService.getById(categoria_id);
+                nuevoProducto.setCategoria(categoria);
+
+                Long condiciones_cabellos_id = (long) row.getCell(7).getNumericCellValue();
+                CondicionesCabellosEntity condiciones_cabellos = condicionesCabellosService.getById(condiciones_cabellos_id);
+                nuevoProducto.setCondicionesCabellos(condiciones_cabellos);
+
+                Long tipos_cabellos_id = (long) row.getCell(8).getNumericCellValue();
+                TiposCabellosEntity tipos_cabellos = tiposCabellosService.getById(tipos_cabellos_id);
+                nuevoProducto.setTiposCabellos(tipos_cabellos);
+
+                // IMPORTANTE configurar esto desp -> if (categoria == null)
+
+                nuevoProducto.setNombre(row.getCell(0).getStringCellValue());
+                nuevoProducto.setDescripcion(row.getCell(1).getStringCellValue());
+                nuevoProducto.setPrecio(row.getCell(2).getNumericCellValue());
+                nuevoProducto.setCantidadDisponible((int) row.getCell(3).getNumericCellValue());
+                nuevoProducto.setDisponible(row.getCell(4).getBooleanCellValue());
+                nuevoProducto.setImagenUrl(row.getCell(5).getStringCellValue());
+
+                productosService.create(nuevoProducto);
+                productosInsertados++;
+
+                }
+
+            model.addAttribute("message", "Carga masiva exitosa. Productos insertados: " + productosInsertados);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("message", "Error durante la carga: " + e.getMessage());
+        }
+
+        return "upload";
+    }
+    
+
+    @GetMapping("/estadisticas/pdf")
+    public void generarEstadisticasPdf(HttpServletResponse response) throws IOException {
+        response.setContentType("application/pdf");
+        response.setHeader("Content-Disposition", "inline; filename=estadisticas_productos.pdf");
+
+        List<ProductosEntity> productos = productosRepository.findAll();
+
+        if (productos == null || productos.isEmpty()) {
+            response.getWriter().write("No hay productos disponibles para generar estadísticas.");
+            return;
+        }
+
+        EstadisticasProductosPdf exporter = new EstadisticasProductosPdf(productos);
+        exporter.export(response);
+    }
 
 }
 

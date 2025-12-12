@@ -1,11 +1,6 @@
 package com.example.organic.Entity;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +30,12 @@ public class UsuarioEntity {
 
     @Column(name="esadmin")
     private boolean esadmin;
+
+    @Column(name="direccion")
+    private String direccion;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private CarritoEntity carrito;
 
     public String getPassword() {
         return password;

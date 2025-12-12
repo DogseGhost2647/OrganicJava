@@ -8,4 +8,6 @@ import com.example.organic.Entity.CategoriasEntity;
 @Repository
 public interface CategoriasRepository extends JpaRepository<CategoriasEntity, Long> {
 
+    boolean existsByNombre(String nombre);
+
 }

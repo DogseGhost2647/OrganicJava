@@ -19,17 +19,17 @@ public class AuthController {
     private UsuarioRepository usuarioRepository;
 
     @GetMapping("/login")
-public String mostrarLogin(@RequestParam(required = false) String error,
-                           @RequestParam(required = false) String registroExitoso,
-                           Model model) {
-    if (error != null) {
-        model.addAttribute("mensajeError", "Correo o contraseña incorrectos.");
+    public String mostrarLogin(@RequestParam(required = false) String error,
+                               @RequestParam(required = false) String registroExitoso,
+                               Model model) {
+        if (error != null) {
+            model.addAttribute("mensajeError", "Correo o contraseña incorrectos.");
+        }
+        if (registroExitoso != null) {
+            model.addAttribute("mensajeExito", "✅ Registro exitoso. Ahora puedes iniciar sesión.");
+        }
+        return "login";
     }
-    if (registroExitoso != null) {
-        model.addAttribute("mensajeExito", "✅ Registro exitoso. Ahora puedes iniciar sesión.");
-    }
-    return "login";
-}
 
     @PostMapping("/login")
     public String procesarLogin(@RequestParam String correo, 
@@ -45,13 +45,9 @@ public String mostrarLogin(@RequestParam(required = false) String error,
                 return "redirect:/homeusuario";
             }
         } else {
-            // en lugar de 500, vuelve al login con un mensaje de error
             model.addAttribute("mensajeError", "Correo o contraseña incorrectos.");
             return "login";
         }
     }
 
-
 }
-
-

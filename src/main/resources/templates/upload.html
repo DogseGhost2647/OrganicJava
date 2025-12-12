@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Cargar inicial de productos</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/images/favicon.png">
+</head>
+
+<body class="bg-gray-50">
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <img class="favicon" src="../images/favicon.png" alt="logo">
+    <div class="navbar-container">
+
+        <a th:href="@{/admin/dashboard}" class="navbar-brand">Organic</a>
+        <div class="navbar-links">
+            <a th:href="@{/admin/dashboard}" class="text-white hover:underline">Dashboard</a>
+            <a th:href="@{/logout}" class="register">Cerra Sesión</a>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="max-w-4xl mx-auto px-4 py-12">
+
+    <h1 class="text-3xl font-bold mb-6 text-center text-green-700">
+        Carga Masiva de Productos (Excel XLSX)
+    </h1>
+
+    <p class="text-center text-gray-700 mb-8">
+        Por favor, suba el archivo con la estructura de datos correcta.
+    </p>
+
+    <!-- TARJETA DEL FORMULARIO -->
+    <div class="bg-white shadow rounded p-8">
+
+        <form th:action="@{/productos/upload}" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+            <div>
+                <label for="fileInput" class="block font-semibold text-green-700 mb-2">Seleccionar archivo XLSX:</label>
+                <input type="file" name="file" id="fileInput"
+                       accept=".xlsx" required
+                       class="border border-gray-300 rounded p-2 w-full bg-white">
+            </div>
+
+            <button type="submit"
+                    class="bg-green-600 text-white px-6 py-3 rounded shadow hover:bg-green-700 transition w-full">
+                Subir y Procesar Productos
+            </button>
+        </form>
+
+        <div th:if="${message}" class="mt-6">
+            <p class="text-green-600 font-semibold text-center" th:text="${message}"></p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>
