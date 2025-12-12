@@ -121,21 +121,57 @@ public class ProductosController {
 
 
     @GetMapping("/editar/{id}")
-    public String mostrarFormularioEdicion(@PathVariable Long id, Model model){
+    public String mostrarFormularioEdicion(@PathVariable Long id, Model model) {
         ProductosEntity producto = productosService.getById(id);
+
         model.addAttribute("producto", producto);
         model.addAttribute("categoria", categoriasService.getAll());
         model.addAttribute("condicionesCabellos", condicionesCabellosService.getAll());
         model.addAttribute("tiposCabellos", tiposCabellosService.getAll());
+
         return "productos/editar";
     }
 
     @PostMapping("/actualizar/{id}")
-    public String actualizarProducto(@PathVariable Long id, @ModelAttribute ProductosEntity producto) {
+    public String actualizarProducto(
+            @PathVariable Long id,
+            @ModelAttribute ProductosEntity producto,
+            @RequestParam("imagen") MultipartFile imagen
+    ) {
+        ProductosEntity productoActual = productosService.getById(id);
+
+        producto.setCategoria(categoriasService.getById(producto.getCategoria().getId()));
+        producto.setCondicionesCabellos(condicionesCabellosService.getById(producto.getCondicionesCabellos().getId()));
+        producto.setTiposCabellos(tiposCabellosService.getById(producto.getTiposCabellos().getId()));
+
         producto.setId(id);
+
+        if (!imagen.isEmpty()) {
+            try {
+                String nombreArchivo = UUID.randomUUID() + "_" + imagen.getOriginalFilename();
+                Path uploadDir = Paths.get(System.getProperty("user.dir"), "uploads");
+                Path rutaArchivo = uploadDir.resolve(nombreArchivo);
+
+                Files.createDirectories(uploadDir);
+                imagen.transferTo(rutaArchivo.toFile());
+
+                producto.setImagenUrl("/uploads/" + nombreArchivo);
+
+                System.out.println("📸 Imagen ACTUALIZADA en: " + rutaArchivo.toAbsolutePath());
+
+            } catch (IOException e) {
+                System.err.println("Error actualizando imagen:");
+                e.printStackTrace();
+            }
+        } else {
+            producto.setImagenUrl(productoActual.getImagenUrl());
+        }
+
         productosService.update(producto);
         return "redirect:/productos";
     }
+
+
 
     @GetMapping("/eliminar/{id}")
     public String eliminarProducto(@PathVariable Long id) {

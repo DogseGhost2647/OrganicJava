@@ -27,7 +27,12 @@
 <h1 class="text-center text-2xl font-bold mb-6">Editar Producto</h1>
 
 <div class="max-w-3xl mx-auto px-4">
-    <form th:action="@{'/productos/actualizar/' + ${producto.id}}" th:object="${producto}" method="post" class="space-y-4 bg-white p-6 shadow rounded">
+    <form th:action="@{'/productos/actualizar/' + ${producto.id}}" 
+        th:object="${producto}" 
+        method="post" 
+        enctype="multipart/form-data"
+        class="space-y-4 bg-white p-6 shadow rounded">
+
         <input type="hidden" th:field="*{id}" />
 
         <div>
@@ -77,6 +82,18 @@
                 <option value="" disabled>Seleccione un tipo</option>
                 <option th:each="tipo : ${tiposCabellos}" th:value="${tipo.id}" th:text="${tipo.nombre}"></option>
             </select>
+        </div>
+        <div>
+            <label class="block font-medium">Imagen Actual:</label>
+            <img th:src="@{${producto.imagenUrl}}" 
+                alt="Imagen del producto"
+                class="w-32 h-32 object-cover rounded border" />
+        </div>
+
+        <div>
+            <label for="imagen" class="block font-medium">Cambiar Imagen:</label>
+            <input type="file" id="imagen" name="imagen" accept="image/*"
+                class="w-full border rounded px-3 py-2" />
         </div>
 
         <div class="flex justify-between mt-4">

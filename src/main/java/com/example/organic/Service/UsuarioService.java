@@ -76,5 +76,12 @@ public class UsuarioService implements IDAO<UsuarioEntity, Long> {
         return usuario.getId();
     }
 
+    public UsuarioEntity actualizarDireccion(Long usuarioId, String nuevaDireccion) {
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setDireccion(nuevaDireccion);
+        return usuarioRepository.save(usuario);
+    }
+
 
 }

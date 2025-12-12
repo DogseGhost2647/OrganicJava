@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 //import jakarta.persistence.JoinColumn;
 //import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -19,30 +21,26 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class DetallesPedidosEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private long id;
-    
-    @Column(name="pedido_id")
-    private Integer pedido;
+    private Long id;
 
-    @Column(name="producto_id")
+    @ManyToOne
+    @JoinColumn(name = "pedido_id")
+    private PedidosEntity pedido;
+
+
+    @Column(name = "producto_id")
     private Integer producto;
 
-    @Column(name="cantidad")
+    @Column(name = "cantidad")
     private Integer cantidad;
 
-    @Column(name="precio_unitario")
+    @Column(name = "precio_unitario")
     private Double precioUnitario;
 
-    @Column(name="subtotal")
-    private Double precioDouble;
-    
-    //@OneToOne
-    //@JoinColumn(name="pedido_id")
-    //private PedidosEntity pedidos;
+    @Column(name = "subtotal")
+    private Double subtotal;
 }

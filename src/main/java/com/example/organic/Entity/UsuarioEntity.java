@@ -32,6 +32,9 @@ public class UsuarioEntity {
     @Column(name="esadmin")
     private boolean esadmin;
 
+    @Column(name="direccion")
+    private String direccion;
+
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private CarritoEntity carrito;
 

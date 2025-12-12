@@ -29,4 +29,6 @@ public class UsuariosDTO {
     private boolean esadmin;
 
     private CarritoEntity carrito;
+
+    private String direccion;
 }
