@@ -1,26 +1,32 @@
-# ===== Etapa 1: Build con Maven =====
-FROM maven:3.9.4-eclipse-temurin-17-alpine AS build
+# Usamos la imagen de Java 17
+FROM eclipse-temurin:17-jdk-alpine
+
+# Crear carpeta de la app
 WORKDIR /app
 
-# Copia el pom.xml y descarga dependencias
+# Copiar pom.xml primero para bajar dependencias
 COPY pom.xml .
+
+# Instalar bash y Maven
+RUN apk add --no-cache bash maven
+
+# Descargar dependencias offline
 RUN mvn dependency:go-offline -B
 
-# Copia el código fuente
-COPY src ./src
+# Copiar el resto del código
+COPY . .
 
-# Compila y genera el JAR (sin tests para que sea más rápido)
-RUN mvn package -DskipTests
+# Build del proyecto
+RUN mvn clean package -DskipTests
 
-# ===== Etapa 2: Imagen final ligera =====
-FROM eclipse-temurin:17-jdk-alpine
-WORKDIR /app
-
-# Copia el JAR generado desde la etapa de build
-COPY --from=build /app/target/*.jar app.jar
-
-# Puerto que expondrá tu aplicación
+# Puerto que escucha Spring Boot
+ENV PORT 8080
 EXPOSE 8080
 
-# Comando para correr la app
-CMD ["java", "-jar", "app.jar"]
+# Variables de entorno para DB
+ENV SPRING_DATASOURCE_URL=jdbc:postgresql://dpg-d4tu1f717kns73csrvog-a:5432/organic_8o66
+ENV SPRING_DATASOURCE_USERNAME=organic_8o66_user
+ENV SPRING_DATASOURCE_PASSWORD=hxp5VvHqkkVmayVS0DEjelGI2BE3slGj
+
+# Comando de arranque
+CMD ["java", "-jar", "target/OrganicJava-0.0.1-SNAPSHOT.jar"]
