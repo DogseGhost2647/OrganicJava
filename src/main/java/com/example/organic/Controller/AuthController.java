@@ -32,8 +32,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String procesarLogin(@RequestParam String correo, 
-                                @RequestParam String password, 
+    public String procesarLogin(@RequestParam("correo") String correo, 
+                                @RequestParam("password") String password, 
                                 Model model) {
         Optional<UsuarioEntity> usuarioOpt = usuarioRepository.findByCorreo(correo);
 
