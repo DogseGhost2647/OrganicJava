@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/login", "/inicio", "/registro", "/css/**", "/js/**", "/images/**").permitAll() //no esta bloqueado
                         .requestMatchers("/admin/**", "/productos/**", "/upload").hasRole("ADMIN") // bloquea usuarios
-                        .requestMatchers("/homeusuario", "/carrito/**").hasRole("USER") // bloquea a admins
+                        .requestMatchers("/homeusuario", "/carrito/**, /resultado-busqueda").hasRole("USER") // bloquea a admins
                         .anyRequest().authenticated() // bloquea a cualquiera que NO este logeado
                 )
                 .formLogin(form -> form

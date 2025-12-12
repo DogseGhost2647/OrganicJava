@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.organic.Entity.CarritoEntity;
 import com.example.organic.Entity.UsuarioEntity;
+import com.example.organic.Repository.CarritoRepository;
 import com.example.organic.Service.UsuarioService;
 import com.example.organic.DTO.UsuariosDTO;
 
@@ -16,6 +18,9 @@ public class RegistroController {
 
     @Autowired
     private UsuarioService usuarioService;
+
+    @Autowired
+    private CarritoRepository carritoRepository;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model){
@@ -33,13 +38,13 @@ public class RegistroController {
                 return "registro";
             }
 
-            // Crear el usuario
+            // Construir el usuario
             UsuarioEntity usuario = new UsuarioEntity();
             usuario.setNombre(dto.getNombre());
             usuario.setCorreo(dto.getCorreo());
             usuario.setPassword(dto.getPassword());
 
-            // Llamar al método que crea usuario + carrito
+            // Guardar usuario y carrito automático
             usuarioService.registrar(usuario);
 
             return "redirect:/login?registroExitoso";
@@ -54,4 +59,5 @@ public class RegistroController {
             return "registro";
         }
     }
+
 }

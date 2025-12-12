@@ -8,20 +8,27 @@
 </head>
 <body>
 
-<!-- NAVBAR -->
 <nav class="navbar">
     <img class="favicon" src="images/favicon.png" alt="logo">
     <div class="navbar-container">
 
         <a th:href="@{/homeusuario}" class="navbar-brand">Organic</a>
+
+        <!-- BUSCADOR -->
+        <form th:action="@{/usuario/buscar}" method="get" class="search-bar">
+            <input type="text" name="q" placeholder="Buscar productos..." required>
+            <button type="submit">🔍</button>
+        </form>
+
         <div class="navbar-links">
-            <a href="#productos">Productos</a>
             <a th:href="@{/carrito}" class="text-white hover:underline">Carrito</a>
+            <a href="#productos">Productos</a>
             <a href="#contacto">Contacto</a>
-            <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">Cerrar sesión</a>
+            <a th:href="@{/logout}" class="register">Cerrar sesión</a>
         </div>
     </div>
 </nav>
+
 
 <!-- HERO SECTION -->
 <section class="hero" th:style="|background-image: url('@{/images/banner.png}');|">
@@ -44,8 +51,9 @@
             <p class="precio" th:text="'$' + ${producto.precio}">Precio</p>
             <form th:action="@{/carrito/agregar}" method="post">
                 <input type="hidden" name="productoId" th:value="${producto.id}" />
-                <input type="number" name="cantidad" value="1" min="1" />
-                <button type="submit">Añadir al carrito</button>
+                <input type="number" name="cantidad" value="1" min="1"
+                       style="margin-bottom: 10px;">
+                <button type="submit" class="btn-secondary">Añadir al carrito</button>
             </form>
         </div>
     </div>
@@ -62,8 +70,9 @@
             <p class="precio" th:text="'$' + ${producto.precio}">Precio</p>
             <form th:action="@{/carrito/agregar}" method="post">
                 <input type="hidden" name="productoId" th:value="${producto.id}" />
-                <input type="number" name="cantidad" value="1" min="1" />
-                <button type="submit">Añadir al carrito</button>
+                <input type="number" name="cantidad" value="1" min="1"
+                       style="margin-bottom: 10px;">
+                <button type="submit" class="btn-secondary">Añadir al carrito</button>
             </form>
         </div>
     </div>

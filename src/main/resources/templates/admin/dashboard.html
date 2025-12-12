@@ -9,23 +9,13 @@
     <body class="bg-gray-50">
 
     <!-- NAVBAR -->
-   <nav class="shadow mb-6" style="background-color: #6c9724;">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
+    <nav class="navbar">
+        <img class="favicon" src="../images/favicon.png" alt="logo">
+        <div class="navbar-container">
 
-                <!-- IZQUIERDA: Logo + Organic -->
-                <div class="flex items-center space-x-3">
-                    <img class="favicon h-8 w-8" th:src="@{/images/favicon.png}" alt="logo">
-                    <a th:href="@{/admin/dashboard}" class="text-xl font-semibold text-white">Organic</a>
-                </div>
-
-                <!-- DERECHA: Cerrar sesión -->
-                <div>
-                    <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">
-                        Cerrar sesión
-                    </a>
-                </div>
-
+            <a th:href="@{/admin/dashboard}" class="navbar-brand">Organic</a>
+            <div class="navbar-links">
+                <a th:href="@{/logout}" class="register">Cerra Sesión</a>
             </div>
         </div>
     </nav>
@@ -37,14 +27,10 @@
         <h1 class="text-3xl font-bold mb-6 text-center text-green-700">Panel de Administración</h1>
 
         <!-- Estadísticas rápidas -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             <div class="bg-green-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
                 <span class="text-4xl font-bold text-green-700" th:text="${totalProductos}">0</span>
                 <span class="text-gray-700 mt-2">Productos Totales</span>
-            </div>
-            <div class="bg-yellow-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
-                <span class="text-4xl font-bold text-yellow-600" th:text="${ventasHoy}">0</span>
-                <span class="text-gray-700 mt-2">Ventas Hoy</span>
             </div>
             <div class="bg-amber-50 rounded shadow p-6 flex flex-col items-center hover:shadow-lg transition">
                 <span class="text-4xl font-bold text-amber-700" th:text="${usuariosRegistrados}">0</span>
@@ -119,9 +105,31 @@
         });
         </script>
 
-
-
         </div>
+        <div class="mt-12">
+    <h2 class="text-2xl font-semibold mb-4 text-green-700">Pedidos Recientes</h2>
+    <table class="w-full border-collapse shadow-md rounded-lg overflow-hidden">
+        <thead>
+            <tr class="bg-green-700 text-white">
+                <th class="py-2 px-4">ID Pedido</th>
+                <th class="py-2 px-4">Usuario</th>
+                <th class="py-2 px-4">Dirección</th>
+                <th class="py-2 px-4">Fecha</th>
+                <th class="py-2 px-4">Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pedido : ${pedidosRecientes}" class="border-b hover:bg-gray-50">
+                <td class="py-2 px-4" th:text="${pedido.id}">1</td>
+                <td class="py-2 px-4" th:text="${pedido.usuario.nombre}">Usuario</td>
+                <td th:text="${pedido.direccionEntrega}">Dirección de envío</td>
+                <td th:text="${pedido.fecha.format(T(java.time.format.DateTimeFormatter).ofPattern('dd/MM/yyyy HH:mm'))}"></td>
+                <td class="py-2 px-4" th:text="'$' + ${pedido.total}">0</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
     </div>
 
 

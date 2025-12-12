@@ -1,5 +1,7 @@
 package com.example.organic.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import com.example.organic.DTO.CarritoItemRequestDTO;
@@ -7,6 +9,7 @@ import com.example.organic.DTO.CarritoResponseDTO;
 import com.example.organic.DTO.ProductoEnCarritoDTO;
 import com.example.organic.Entity.CarritoEntity;
 import com.example.organic.Entity.Carrito_ProductosEntity;
+import com.example.organic.Entity.PedidosEntity;
 import com.example.organic.Entity.ProductosEntity;
 import com.example.organic.Entity.UsuarioEntity;
 import com.example.organic.Repository.CarritoRepository;
@@ -15,8 +18,9 @@ import com.example.organic.Repository.ProductosRepository;
 import com.example.organic.Repository.UsuarioRepository;
 import com.example.organic.Service.DAO.IDAO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -45,14 +49,18 @@ public class CarritoService {
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + correo));
     }
 
-
     //metodo para obtener el carritp de un usuario
     public CarritoEntity obtenerCarrito() {
         UsuarioEntity usuario = obtenerUsuarioLogueado();
-        return carritoRepository.findByUsuarioId(usuario.getId())
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado para el usuario " + usuario.getId()));
-    }
 
+        return carritoRepository.findByUsuarioId(usuario.getId())
+                .orElseGet(() -> {
+                    CarritoEntity nuevo = new CarritoEntity();
+                    nuevo.setUsuario(usuario);
+                    nuevo.setItems(new ArrayList<>());
+                    return carritoRepository.save(nuevo);
+                });
+    }
 
     //metodo para añadir productos al carrito
     public void agregarProductos(CarritoItemRequestDTO itemDTO) {
@@ -75,7 +83,6 @@ public class CarritoService {
             carrito_productosRepository.save(nuevoItem);
         }
     }
-
 
     //metodo para ver el carrito
     public CarritoResponseDTO obtenerCarritoDTO() {
@@ -116,5 +123,4 @@ public class CarritoService {
 
         carrito_productosRepository.delete(item);
     }
-
 }

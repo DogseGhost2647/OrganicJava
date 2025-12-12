@@ -4,33 +4,22 @@
     <title>Lista de Productos</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="images/favicon.png">
 </head>
 <body>
 
 <!-- NAVBAR -->
-<nav class="shadow mb-6" style="background-color: #6c9724;">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
+<nav class="navbar">
+    <img class="favicon" src="../images/favicon.png" alt="logo">
+    <div class="navbar-container">
 
-            <!-- IZQUIERDA: Logo + Organic -->
-            <div class="flex items-center space-x-3">
-                <img class="favicon h-8 w-8" th:src="@{/images/favicon.png}" alt="logo">
-                <a th:href="@{/admin/dashboard}" class="text-xl font-semibold text-white">Organic</a>
-                <div class="space-x-4">
-
-                <!-- DERECHA: Cerrar sesión -->
-                <div class="flex items-center space-x-4">
-                    <a th:href="@{/admin/dashboard}" class="text-white hover:underline">
-                        Dashboard
-                    </a>
-                    <a th:href="@{/logout}" class="text-white hover:text-gray-200 transition">
-                        Cerrar sesión
-                    </a>
-                </div>
-            </div>
+        <a th:href="@{/admin/dashboard}" class="navbar-brand">Organic</a>
+        <div class="navbar-links">
+            <a th:href="@{/admin/dashboard}" class="text-white hover:underline">Dashboard</a>
+            <a th:href="@{/logout}" class="register">Cerra Sesión</a>
         </div>
     </div>
-    </nav>
+</nav>
 
     <!-- CONTENIDO -->
     <h1 class="text-center text-2xl font-bold mb-6">Productos</h1>

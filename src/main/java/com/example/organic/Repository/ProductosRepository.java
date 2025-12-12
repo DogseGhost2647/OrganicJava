@@ -1,5 +1,6 @@
 package com.example.organic.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import jakarta.transaction.Transactional;
@@ -14,10 +15,14 @@ import com.example.organic.Entity.TiposCabellosEntity;
 @Transactional
 @Repository
 public interface ProductosRepository extends JpaRepository<ProductosEntity, Long>{
+
     Optional<ProductosEntity> findByNombreAndCategoriaAndTiposCabellosAndCondicionesCabellos(
         String nombre,
         CategoriasEntity categoria,
         TiposCabellosEntity tipo,
         CondicionesCabellosEntity condicion
     );
+
+    List<ProductosEntity>findByNombreContainingIgnoreCase(String nombre);
+
 }
